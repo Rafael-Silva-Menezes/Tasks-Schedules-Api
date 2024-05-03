@@ -1,9 +1,10 @@
-import { IUseCase } from "../../../shared/application/use-case.interfce";
-import { ScheduleOutput } from "../common/schedule.use-case.mapper.types";
+import { IUseCase } from '@core/shared/application/use-case.interfce';
+import { ScheduleOutput } from '../common/schedule.use-case.mapper.types';
 
 export type GetScheduleInput = {
- id: string;
+  id: string;
 };
 export type GetScheduleOutput = ScheduleOutput;
 
-export interface IGetScheduleUseCase extends IUseCase<GetScheduleInput,GetScheduleOutput>{}
+export interface IGetScheduleUseCase
+  extends IUseCase<GetScheduleInput, GetScheduleOutput> {}

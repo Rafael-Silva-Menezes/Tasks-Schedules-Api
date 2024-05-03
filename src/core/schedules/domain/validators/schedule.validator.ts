@@ -1,6 +1,6 @@
-import { ClassValidatorFields } from "../../../shared/domain/validators/class-fields.validator";
-import { Notification } from "../../../shared/domain/validators/notification";
+import { ClassValidatorFields } from "@core/shared/domain/validators/class-fields.validator";
 import { ScheduleRules } from "./schedule-rules.validator";
+import { Notification } from "@core/shared/domain/validators/notification";
 
 export class ScheduleValidator extends ClassValidatorFields {
   validate(notification: Notification, data: any, fields?: string[]): boolean {

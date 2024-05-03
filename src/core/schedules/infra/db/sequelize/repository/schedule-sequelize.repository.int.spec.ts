@@ -1,11 +1,11 @@
-import { ScheduleSequelizeRepository } from "./schedule-sequelize.repository";
-import { Uuid } from "../../../../../shared/domain/value-objects/uuid-value-object";
-import { Schedule } from "../../../../domain/entities/schedule.entity";
-import { ScheduleModel } from "../model/schedule.model";
-import { setupSequelize } from "../../../../../shared/infra/testing/helpers";
-import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
+import { Schedule } from "@core/schedules/domain/entities/schedule.entity";
+import { ScheduleSearchParams, ScheduleSearchResult } from "@core/schedules/domain/interfaces/schedule.repository";
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
+import { setupSequelize } from "@core/shared/infra/testing/helpers";
 import { ScheduleModelMapper } from "../model/schedule-mapper.model";
-import { ScheduleSearchParams, ScheduleSearchResult } from "../../../../domain/interfaces/schedule.repository";
+import { ScheduleModel } from "../model/schedule.model";
+import { ScheduleSequelizeRepository } from "./schedule-sequelize.repository";
+import { NotFoundError } from "@core/shared/domain/errors/not-found.error";
 
 describe("ScheduleSequelizeRepository Integration Tests", () => {
   let repository: ScheduleSequelizeRepository;

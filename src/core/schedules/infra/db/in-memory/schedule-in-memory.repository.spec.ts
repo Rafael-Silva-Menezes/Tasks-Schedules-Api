@@ -1,5 +1,5 @@
-import { Uuid } from "../../../../shared/domain/value-objects/uuid-value-object";
-import { ScheduleFakeBuilder } from "../../../domain/entities/schedule-faker.builder";
+import { ScheduleFakeBuilder } from "@core/schedules/domain/entities/schedule-faker.builder";
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
 import { ScheduleInMemoryRepository } from "./schedule-in-memory.repository";
 
 describe("ScheduleInMemoryRepository", () => {

@@ -1,11 +1,10 @@
+import { Schedule } from "@core/schedules/domain/entities/schedule.entity";
+import { IScheduleRepository, ScheduleSearchParams, ScheduleSearchResult } from "@core/schedules/domain/interfaces/schedule.repository";
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
 import { Op } from "sequelize";
-import { ScheduleModel } from "../model/schedule.model";
-import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
-import { Uuid } from "../../../../../shared/domain/value-objects/uuid-value-object";
-import { Schedule } from "../../../../domain/entities/schedule.entity";
-import { IScheduleRepository, ScheduleSearchParams, ScheduleSearchResult } from "../../../../domain/interfaces/schedule.repository";
 import { ScheduleModelMapper } from "../model/schedule-mapper.model";
-
+import { ScheduleModel } from "../model/schedule.model";
+import { NotFoundError } from "@core/shared/domain/errors/not-found.error";
 
 export class ScheduleSequelizeRepository implements IScheduleRepository {
 

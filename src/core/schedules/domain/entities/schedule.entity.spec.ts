@@ -1,6 +1,7 @@
-import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
 import { ScheduleCreateCommand } from "../interfaces/schedule.types";
 import { Schedule } from "./schedule.entity";
+
 
 describe("Schedule unit tests", () => {
   let validateSpy: any;

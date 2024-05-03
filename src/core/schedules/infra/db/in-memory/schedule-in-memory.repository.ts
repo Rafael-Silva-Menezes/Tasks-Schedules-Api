@@ -1,8 +1,8 @@
-import { SortDirection } from "../../../../shared/domain/repository/search/search-params";
-import { Uuid } from "../../../../shared/domain/value-objects/uuid-value-object";
-import { InMemorySearchableRepository } from "../../../../shared/infra/db/in-memory-searchable.repository";
-import { Schedule } from "../../../domain/entities/schedule.entity";
-import { IScheduleRepository, ScheduleFilter } from "../../../domain/interfaces/schedule.repository";
+import { Schedule } from "@core/schedules/domain/entities/schedule.entity";
+import { IScheduleRepository, ScheduleFilter } from "@core/schedules/domain/interfaces/schedule.repository";
+import { SortDirection } from "@core/shared/domain/repository/search/search-params";
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
+import { InMemorySearchableRepository } from "@core/shared/infra/db/in-memory-searchable.repository";
 
 export class ScheduleInMemoryRepository extends InMemorySearchableRepository<Schedule, Uuid> implements IScheduleRepository {
     sortableFields: string[] = ["agentId", "accountId", "createdAt"];

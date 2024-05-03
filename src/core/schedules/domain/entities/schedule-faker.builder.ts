@@ -1,6 +1,6 @@
-import { Chance } from "chance";
-import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
-import { Schedule } from "./schedule.entity";
+import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
+import { Schedule } from './schedule.entity';
+import { Chance } from 'chance';
 
 type PropOrFactory<T> = T | ((index: number) => T);
 
@@ -12,7 +12,7 @@ export class ScheduleFakeBuilder<TBuild = any> {
   private _endTime: PropOrFactory<Date | null> = (_index) => new Date() || null;
   private _createdAt: PropOrFactory<Date> | undefined = undefined;
 
-  private countObjs;
+  private countObjs = 0;
 
   static aSchedule() {
     return new ScheduleFakeBuilder<Schedule>();
@@ -60,21 +60,28 @@ export class ScheduleFakeBuilder<TBuild = any> {
   }
 
   build(): TBuild {
-
     const schedules = new Array(this.countObjs)
-    .fill(undefined)
-    .map((_, index) => {
-      const schedule = new Schedule({
-        scheduleId: this._scheduleId ? this.callFactory(this._scheduleId, index) : undefined,
-        accountId: this._accountId ? this.callFactory(this._accountId, index) : undefined,
-        agentId: this._agentId ? this.callFactory(this._agentId, index) : undefined,
-        startTime: this.callFactory(this._startTime, index),
-        endTime: this.callFactory(this._endTime, index),
-        createdAt: this._createdAt ? this.callFactory(this._createdAt, index) : undefined,
+      .fill(undefined)
+      .map((_, index) => {
+        const schedule = new Schedule({
+          scheduleId: this._scheduleId
+            ? this.callFactory(this._scheduleId, index)
+            : undefined,
+          accountId: this._accountId
+            ? this.callFactory(this._accountId, index)
+            : undefined,
+          agentId: this._agentId
+            ? this.callFactory(this._agentId, index)
+            : undefined,
+          startTime: this.callFactory(this._startTime, index),
+          endTime: this.callFactory(this._endTime, index),
+          createdAt: this._createdAt
+            ? this.callFactory(this._createdAt, index)
+            : undefined,
+        });
+        schedule.validate();
+        return schedule;
       });
-      schedule.validate();
-      return schedule;
-    });
     return this.countObjs === 1 ? (schedules[0] as any) : schedules;
   }
 
@@ -103,18 +110,18 @@ export class ScheduleFakeBuilder<TBuild = any> {
   }
 
   private getValue(prop: any) {
-    const optional = ["scheduleId", "createdAt"];
+    const optional = ['scheduleId', 'createdAt'];
     const privateProp = `_${prop}` as keyof this;
     if (!this[privateProp] && optional.includes(prop)) {
       throw new Error(
-        `Property ${prop} not have a factory, use 'with' methods`
+        `Property ${prop} not have a factory, use 'with' methods`,
       );
     }
     return this.callFactory(this[privateProp], 0);
   }
 
   private callFactory(factoryOrValue: PropOrFactory<any>, index: number) {
-    return typeof factoryOrValue === "function"
+    return typeof factoryOrValue === 'function'
       ? factoryOrValue(index)
       : factoryOrValue;
   }

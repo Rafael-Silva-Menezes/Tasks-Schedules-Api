@@ -1,9 +1,9 @@
-import { Entity } from "../../../shared/domain/entities/entity";
-import { ValueObject } from "../../../shared/domain/entities/value-object";
-import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
-import { ScheduleFakeBuilder } from "./schedule-faker.builder";
+import { Entity } from "@core/shared/domain/entities/entity";
+import { ValueObject } from "@core/shared/domain/entities/value-object";
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
 import { ScheduleConstructorProps, ScheduleCreateCommand } from "../interfaces/schedule.types";
 import { ScheduleValidatorFactory } from "../validators/schedule.validator";
+import { ScheduleFakeBuilder } from "./schedule-faker.builder";
 
 export class Schedule extends Entity {
  private scheduleId: Uuid;

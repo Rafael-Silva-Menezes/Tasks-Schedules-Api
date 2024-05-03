@@ -1,4 +1,4 @@
-import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
 
 export type ScheduleConstructorProps = {
  scheduleId?: Uuid;

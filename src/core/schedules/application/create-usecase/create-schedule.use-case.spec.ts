@@ -1,6 +1,5 @@
-import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
-import { ScheduleInMemoryRepository } from "../../infra/db/in-memory/schedule-in-memory.repository";
-import { CreateScheduleUseCase } from "./create-schedule.use-case";
+import { ScheduleInMemoryRepository } from '../../infra/db/in-memory/schedule-in-memory.repository';
+import { CreateScheduleUseCase } from './create-schedule.use-case';
 
 describe('CreateScheduleUseCase Unit Tests', () => {
   let useCase: CreateScheduleUseCase;
@@ -15,7 +14,7 @@ describe('CreateScheduleUseCase Unit Tests', () => {
     const input = {
       accountId: 'a1e8f3f0-55fb-42e4-b4cf-8d6e332b68f1',
       endTime: new Date(),
-    };    
+    };
     await expect(() => useCase.execute(input)).rejects.toThrow(
       'Entity Validation Error',
     );

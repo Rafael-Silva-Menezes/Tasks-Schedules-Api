@@ -1,7 +1,6 @@
-
-import { EntityValidationError } from "../../../../../shared/domain/validators/validation.error";
-import { Uuid } from "../../../../../shared/domain/value-objects/uuid-value-object";
-import { Schedule } from "../../../../domain/entities/schedule.entity";
+import { Schedule } from "@core/schedules/domain/entities/schedule.entity";
+import { EntityValidationError } from "@core/shared/domain/validators/validation.error";
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
 import { ScheduleModel } from "./schedule.model";
 
 export class ScheduleModelMapper {

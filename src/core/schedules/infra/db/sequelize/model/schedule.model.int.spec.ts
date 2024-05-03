@@ -1,7 +1,7 @@
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
+import { setupSequelize } from "@core/shared/infra/testing/helpers";
 import { DataType } from "sequelize-typescript";
 import { ScheduleModel } from "./schedule.model";
-import { Uuid } from "../../../../../shared/domain/value-objects/uuid-value-object";
-import { setupSequelize } from "../../../../../shared/infra/testing/helpers";
 
 describe("ScheduleModel Integration Tests", () => {
   setupSequelize({ models: [ScheduleModel] });

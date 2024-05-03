@@ -1,13 +1,15 @@
-import { NotFoundError } from "../../../shared/domain/errors/not-found.error";
-import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
-import { Schedule } from "../../domain/entities/schedule.entity";
-import { IScheduleRepository } from "../../domain/interfaces/schedule.repository";
-import { ScheduleMapper } from "../common/schedule.use-case.mapper";
-import { GetScheduleInput, GetScheduleOutput, IGetScheduleUseCase } from "./get-schedule.use-case.interface";
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
+import { IScheduleRepository } from '@core/schedules/domain/interfaces/schedule.repository';
+import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
+import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
+import { ScheduleMapper } from '../common/schedule.use-case.mapper';
+import {
+  IGetScheduleUseCase,
+  GetScheduleInput,
+  GetScheduleOutput,
+} from './get-schedule.use-case.interface';
 
-export class GetScheduleUseCase
-  implements IGetScheduleUseCase
-{
+export class GetScheduleUseCase implements IGetScheduleUseCase {
   constructor(private scheduleRepository: IScheduleRepository) {}
 
   async execute(input: GetScheduleInput): Promise<GetScheduleOutput> {

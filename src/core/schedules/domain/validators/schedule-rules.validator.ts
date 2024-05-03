@@ -1,7 +1,7 @@
-import { IsDate, IsNotEmpty, IsOptional,IsUUID,Validate } from "class-validator";
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
+import { IsUUID, IsNotEmpty, IsOptional, IsDate, Validate } from "class-validator";
 import { Schedule } from "../entities/schedule.entity";
 import { IsValidEndTimeConstraint } from "./schedule-endTime.validator";
-import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
 
 export class ScheduleRules {
  @IsUUID()

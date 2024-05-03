@@ -13,19 +13,19 @@ export class IsValidEndTimeConstraint implements ValidatorConstraintInterface {
     const endTime = scheduleObject.endTime;
 
     if (!endTime) {
-      return true; // endTime is null, no validation needed
+      return true; 
     }
 
     if (!startTime) {
-      return false; // startTime is null but endTime is defined, invalid
+      return false; 
     }
 
     if ((value !== null && !(value instanceof Date)) || (startTime !== null && !(startTime instanceof Date))) {
-      return false; // Not both values are Dates or null
+      return false; 
     }
     
 
-    return value.getTime() >= startTime.getTime(); // endTime must be greater than or equal to startTime
+    return value.getTime() >= startTime.getTime(); 
   }
 
   defaultMessage(args: ValidationArguments) {

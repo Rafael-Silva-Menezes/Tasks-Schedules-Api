@@ -1,7 +1,7 @@
-import { Entity } from "../../domain/entities/entity";
-import { SearchParams } from "../../domain/repository/search/search-params";
-import { SearchResult } from "../../domain/repository/search/search-result";
-import { Uuid } from "../../domain/value-objects/uuid-value-object";
+import { Entity } from "@core/shared/domain/entities/entity";
+import { SearchParams } from "@core/shared/domain/repository/search/search-params";
+import { SearchResult } from "@core/shared/domain/repository/search/search-result";
+import { Uuid } from "@core/shared/domain/value-objects/uuid-value-object";
 import { InMemorySearchableRepository } from "./in-memory-searchable.repository";
 
 

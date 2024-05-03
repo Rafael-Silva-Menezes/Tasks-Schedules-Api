@@ -1,7 +1,5 @@
 import { Notification } from '../../domain/validators/notification';
 
-
-
 expect.extend({
   notificationContainsErrorMessages(
     expected: Notification,

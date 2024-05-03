@@ -1,11 +1,10 @@
-import { NotFoundError } from "../../../shared/domain/errors/not-found.error";
-import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
-import { setupSequelize } from "../../../shared/infra/testing/helpers";
-import { Schedule } from "../../domain/entities/schedule.entity";
-import { ScheduleModel } from "../../infra/db/sequelize/model/schedule.model";
-import { ScheduleSequelizeRepository } from "../../infra/db/sequelize/repository/schedule-sequelize.repository";
-import { UpdateScheduleUseCase } from "./update-schedule.use-case";
-
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
+import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
+import { ScheduleSequelizeRepository } from '@core/schedules/infra/db/sequelize/repository/schedule-sequelize.repository';
+import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
+import { setupSequelize } from '@core/shared/infra/testing/helpers';
+import { UpdateScheduleUseCase } from './update-schedule.use-case';
+import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
 
 describe('UpdateScheduleUseCase Integration Tests', () => {
   let useCase: UpdateScheduleUseCase;
@@ -19,10 +18,10 @@ describe('UpdateScheduleUseCase Integration Tests', () => {
   });
 
   it('should throws error when entity not found', async () => {
-    const {id} = new Uuid();
-    await expect(() =>
-      useCase.execute({ id, })
-    ).rejects.toThrow(new NotFoundError(id, Schedule));
+    const { id } = new Uuid();
+    await expect(() => useCase.execute({ id })).rejects.toThrow(
+      new NotFoundError(id, Schedule),
+    );
   });
 
   it('should update a schedule', async () => {
@@ -34,11 +33,11 @@ describe('UpdateScheduleUseCase Integration Tests', () => {
     const entity = Schedule.fake().aSchedule().withAccountId(accountId).build();
     repository.insert(entity);
 
-    let output = await useCase.execute({
+    const output = await useCase.execute({
       id: entity.getScheduleId().id,
       agentId: agentId.id,
       startTime,
-      endTime
+      endTime,
     });
 
     expect(output).toStrictEqual({
@@ -49,5 +48,5 @@ describe('UpdateScheduleUseCase Integration Tests', () => {
       endTime,
       createdAt: entity.getCreatedAt(),
     });
-});
+  });
 });
