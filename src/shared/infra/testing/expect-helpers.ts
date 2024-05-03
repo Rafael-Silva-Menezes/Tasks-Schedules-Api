@@ -1,14 +1,6 @@
-//import { ClassValidatorFields } from "../../domain/validators/class-validator-fields";
-//import { EntityValidationError } from "../../domain/validators/validation.error";
-//import { FieldsErrors } from "../../domain/validators/validator-fields-interface";
 import { Notification } from '../../domain/validators/notification';
 
-// type Expected =
-//   | {
-//       validator: ClassValidatorFields<any>;
-//       data: any;
-//     }
-//   | (() => any);
+
 
 expect.extend({
   notificationContainsErrorMessages(

@@ -11,7 +11,15 @@ describe('CreateScheduleUseCase Unit Tests', () => {
     useCase = new CreateScheduleUseCase(repository);
   });
 
- 
+  it('should throw an error when aggregate is not valid', async () => {
+    const input = {
+      accountId: 'a1e8f3f0-55fb-42e4-b4cf-8d6e332b68f1',
+      endTime: new Date(),
+    };    
+    await expect(() => useCase.execute(input)).rejects.toThrow(
+      'Entity Validation Error',
+    );
+  });
 
   it('should create a schedule', async () => {
     const spyInsert = jest.spyOn(repository, 'insert');

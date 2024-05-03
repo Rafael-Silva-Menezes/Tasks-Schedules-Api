@@ -1,7 +1,7 @@
 import { IUseCase } from "../../../shared/application/use-case.interfce";
-import { ScheduleInput, ScheduleOutput } from "../common/schedule.use-case.mapper.types";
+import { ScheduleOutput } from "../common/schedule.use-case.mapper.types";
+import { CreateScheduleInput } from "./create-schedule.input";
 
-export type CreateScheduleInput = ScheduleInput;
 export type CreateScheduleOutput = ScheduleOutput;
 
 export interface ICreateScheduleUseCase 

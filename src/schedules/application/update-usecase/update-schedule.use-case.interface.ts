@@ -1,9 +1,7 @@
 import { IUseCase } from "../../../shared/application/use-case.interfce";
-import { ScheduleInput, ScheduleOutput } from "../common/schedule.use-case.mapper.types";
+import { ScheduleOutput } from "../common/schedule.use-case.mapper.types";
+import { UpdateScheduleInput } from "./update-schedule.input";
 
-export type UpdateScheduleInput = Omit<ScheduleInput, 'accountId'> & {
- id:string
-};
 
 export type UpdateScheduleOutput = ScheduleOutput;
 

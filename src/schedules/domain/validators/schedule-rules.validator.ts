@@ -1,24 +1,24 @@
-import { IsDate, IsNotEmpty, IsOptional, IsUUID, Validate } from "class-validator";
+import { IsDate, IsNotEmpty, IsOptional,IsUUID,Validate } from "class-validator";
 import { Schedule } from "../../../schedules/domain/entities/schedule.entity";
-import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
 import { IsValidEndTimeConstraint } from "./schedule-endTime.validator";
+import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
 
 export class ScheduleRules {
-//  @IsUUID()
-//  @IsNotEmpty()
-//  scheduleId: Uuid;
+ @IsUUID()
+ @IsNotEmpty({ groups: ['scheduleId'] })
+ scheduleId: Uuid;
 
-//  @IsUUID()
-//  @IsNotEmpty()
-//  accountId: Uuid;
+ @IsUUID()
+ @IsNotEmpty({ groups: ['accountId'] })
+ accountId: Uuid;
 
-//  @IsUUID()
-//  @IsOptional()
-//  agentId: Uuid | null;
+ @IsUUID()
+ @IsOptional({ groups: ['agentId'] })
+ agentId: Uuid | null;
 
-//  @IsDate()
-//  @IsOptional()
-//  startTime: Date | null;
+ @IsDate({ groups: ['startTime'] })
+ @IsOptional()
+ startTime: Date | null;
 
  @IsDate()
  @IsOptional()
@@ -26,14 +26,6 @@ export class ScheduleRules {
  endTime: Date | null;
 
  constructor(schedule: Schedule){
-  // const scheduleValues = {
-  //   scheduleId: schedule.getScheduleId().id,
-  //   accountId: schedule.getAccountId().id,
-  //   agentId: schedule.getAgentId() ? schedule.getAgentId().id : null, 
-  //   startTime: schedule.getStartTime(), 
-  //   endTime: schedule.getEndTime()
-  // }
-
   Object.assign(this, schedule)
  }
 }

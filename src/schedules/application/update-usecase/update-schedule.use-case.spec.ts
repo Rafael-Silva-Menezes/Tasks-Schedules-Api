@@ -2,8 +2,9 @@ import { NotFoundError } from "../../../shared/domain/errors/not-found.error";
 import { InvalidUuidError, Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
 import { Schedule } from "../../domain/entities/schedule.entity";
 import { ScheduleInMemoryRepository } from "../../infra/db/in-memory/schedule-in-memory.repository";
+import { UpdateScheduleInput } from "./update-schedule.input";
 import { UpdateScheduleUseCase } from "./update-schedule.use-case";
-import { UpdateScheduleInput, UpdateScheduleOutput } from "./update-schedule.use-case.interface";
+import {  UpdateScheduleOutput } from "./update-schedule.use-case.interface";
 
 
 describe("UpdateScheduleUseCase Unit Tests", () => {

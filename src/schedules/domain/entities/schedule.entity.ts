@@ -16,10 +16,10 @@ export class Schedule extends Entity {
   constructor(props: ScheduleConstructorProps) {
   super()
   this.scheduleId = props.scheduleId|| new Uuid();
-  this.accountId= props.accountId;
-  this.agentId= props.agentId ?? null;
-  this.startTime= props.startTime ?? null;
-  this.endTime= props.endTime && props.startTime ? props.endTime : null;
+  this.accountId = props.accountId;
+  this.agentId = props.agentId ?? null;
+  this.startTime = props.startTime ?? null;
+  this.endTime = props.endTime ?? null;
   this.createdAt= props.createdAt ?? new Date() ;
  }
 
@@ -29,7 +29,7 @@ export class Schedule extends Entity {
 
   static create(props: ScheduleCreateCommand): Schedule {
     const schedule = new Schedule(props);
-    schedule.validate();
+    schedule.validate(["scheduleId","accountId", "agentId","startTime","endTime"]);
     return schedule;
   }
 

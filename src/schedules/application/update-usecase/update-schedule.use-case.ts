@@ -4,7 +4,8 @@ import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
 import { Schedule } from "../../domain/entities/schedule.entity";
 import { IScheduleRepository } from "../../domain/interfaces/schedule.repository";
 import { ScheduleMapper } from "../common/schedule.use-case.mapper";
-import { IUpdateScheduleUseCase, UpdateScheduleInput, UpdateScheduleOutput } from "./update-schedule.use-case.interface";
+import { UpdateScheduleInput } from "./update-schedule.input";
+import { IUpdateScheduleUseCase, UpdateScheduleOutput } from "./update-schedule.use-case.interface";
 
 export class UpdateScheduleUseCase 
 implements IUpdateScheduleUseCase {
@@ -23,6 +24,9 @@ implements IUpdateScheduleUseCase {
      input.endTime && schedule.setEndTime(input.endTime);
      
      await this.scheduleRepository.update(schedule);
+     if (schedule.notification.hasErrors()) {
+        throw new EntityValidationError(schedule.notification.toJSON());
+      }
 
      return ScheduleMapper.toOutput(schedule);
  }
