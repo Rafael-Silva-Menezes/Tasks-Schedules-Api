@@ -1,5 +1,5 @@
 import { IsDate, IsNotEmpty, IsOptional,IsUUID,Validate } from "class-validator";
-import { Schedule } from "../../../schedules/domain/entities/schedule.entity";
+import { Schedule } from "../entities/schedule.entity";
 import { IsValidEndTimeConstraint } from "./schedule-endTime.validator";
 import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
 

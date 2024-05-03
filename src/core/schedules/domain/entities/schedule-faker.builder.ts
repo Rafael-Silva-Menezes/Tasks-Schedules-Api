@@ -1,6 +1,6 @@
 import { Chance } from "chance";
 import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
-import { Schedule } from "../../domain/entities/schedule.entity";
+import { Schedule } from "./schedule.entity";
 
 type PropOrFactory<T> = T | ((index: number) => T);
 
