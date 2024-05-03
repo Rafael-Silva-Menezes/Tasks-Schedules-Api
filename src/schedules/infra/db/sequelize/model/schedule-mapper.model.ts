@@ -26,7 +26,13 @@ export class ScheduleModelMapper {
    createdAt: model.createdAt,
   })
 
-  Schedule.validate(schedule);
+
+
+  schedule.validate();
+
+  if (schedule.notification.hasErrors()) {
+   throw new EntityValidationError(schedule.notification.toJSON());
+ }
   
   return schedule;
  }

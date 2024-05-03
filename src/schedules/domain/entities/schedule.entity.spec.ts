@@ -5,8 +5,11 @@ import { Schedule } from "./schedule.entity";
 describe("Schedule unit tests", () => {
   let validateSpy: any;
   beforeEach(() => {
-    validateSpy = jest.spyOn(Schedule, "validate");
+    Schedule.prototype.validate = jest
+      .fn()
+      .mockImplementation(Schedule.prototype.validate);
   });
+
   describe("create command", () => {
     test("should create a schedule with only the required values.", () => {
      const accountId = new Uuid();
@@ -21,7 +24,7 @@ describe("Schedule unit tests", () => {
      expect(schedule.getStartTime()).toBeNull();
      expect(schedule.getEndTime()).toBeNull();
      expect(schedule.getCreatedAt()).toBeInstanceOf(Date);
-     expect(validateSpy).toHaveBeenCalledTimes(1);
+     expect(Schedule.prototype.validate).toHaveBeenCalledTimes(1);
     })
  
     test("should create a schedule with all values.", () => {
@@ -47,7 +50,7 @@ describe("Schedule unit tests", () => {
      expect(schedule.getStartTime()).toBe(startTime);
      expect(schedule.getEndTime()).toBe(endTime);
      expect(schedule.getCreatedAt()).toBeInstanceOf(Date);
-     expect(validateSpy).toHaveBeenCalledTimes(1);
+     expect(Schedule.prototype.validate).toHaveBeenCalledTimes(1);
     })
  })
 
@@ -122,9 +125,11 @@ describe('setEndTime method', () => {
       accountId: new Uuid(),
       agentId: new Uuid(),
     });
+    schedule.setEndTime(new Date())
 
-    expect(() => schedule.setEndTime(new Date())).containsErrorMessages(
-      {"endTime":["startTime must be defined before endTime"]}
+    expect(schedule.notification.hasErrors()).toBe(true);
+    expect(schedule.notification).notificationContainsErrorMessages(
+      [{endTime:["startTime must be defined before endTime"]}]
   );
   });
 
@@ -138,10 +143,13 @@ describe('setEndTime method', () => {
     const endTimeBeforeStartTime = new Date(schedule.getStartTime());
     const startTimeCast = schedule.getStartTime();
     endTimeBeforeStartTime.setHours( startTimeCast.getHours() - 1);
+    schedule.setEndTime(endTimeBeforeStartTime)
 
-    expect(() => schedule.setEndTime(endTimeBeforeStartTime)).containsErrorMessages(
-      {"endTime":["endTime must be before startTime"]}
-
+    expect(schedule.notification.hasErrors()).toBe(true);
+    expect(schedule.notification).notificationContainsErrorMessages(
+      [{
+        endTime: ["endTime must be equal or greater than startTime"],
+      }],
     );
   });
 });

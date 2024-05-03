@@ -72,6 +72,7 @@ export class ScheduleFakeBuilder<TBuild = any> {
         endTime: this.callFactory(this._endTime, index),
         createdAt: this._createdAt ? this.callFactory(this._createdAt, index) : undefined,
       });
+      schedule.validate();
       return schedule;
     });
     return this.countObjs === 1 ? (schedules[0] as any) : schedules;

@@ -4,7 +4,6 @@ import { Uuid } from "../../../shared/domain/value-objects/uuid-value-object";
 import { ScheduleFakeBuilder } from "./schedule-faker.builder";
 import { ScheduleConstructorProps, ScheduleCreateCommand } from "../interfaces/schedule.types";
 import { ScheduleValidatorFactory } from "../validators/schedule.validator";
-import { EntityValidationError } from "../../../shared/domain/validators/validation.error";
 
 export class Schedule extends Entity {
  private scheduleId: Uuid;
@@ -30,31 +29,28 @@ export class Schedule extends Entity {
 
   static create(props: ScheduleCreateCommand): Schedule {
     const schedule = new Schedule(props);
-    Schedule.validate(schedule);
+    schedule.validate();
     return schedule;
   }
 
-  static validate(entity: Schedule) {
+  validate(fields?: string[]) {
     const validator = ScheduleValidatorFactory.create();
-    const isValid = validator.validate(entity);
-    if (!isValid) {
-      throw new EntityValidationError(validator.errors);
-    }
+    return validator.validate(this.notification, this, fields);
   }
 
   setResponsibleAgent(agentId: Uuid): void {
     this.agentId = agentId;
-    Schedule.validate(this);
+    this.validate(['agentId']);
   }
   
   setStartTime(startTime: Date): void {
     this.startTime = startTime;
-    Schedule.validate(this);
+    this.validate(['startTime']);
 }
 
   setEndTime(endTime: Date): void {
     this.endTime = endTime;
-    Schedule.validate(this);
+    this.validate(['endTime']);
   }
 
   getScheduleId(): Uuid{

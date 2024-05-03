@@ -58,6 +58,7 @@ describe('ListSchedulesUseCase Integration Tests', () => {
       filter: agentId.id,
     });
 
+
     expect(output).toEqual({
       items: [schedules[2],schedules[3]].map(ScheduleMapper.toOutput),
       total: 3,
