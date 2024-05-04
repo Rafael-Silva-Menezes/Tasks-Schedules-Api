@@ -15,6 +15,8 @@ import { DeleteScheduleUseCase } from '@core/schedules/application/usecases/dele
 import { GetScheduleUseCase } from '@core/schedules/application/usecases/get-usecase/get-schedule.use-case';
 import { UpdateScheduleUseCase } from '@core/schedules/application/usecases/update-usecase/update-schedule.use-case';
 import { ListScheduleUseCase } from '@core/schedules/application/usecases/list-usecase/list-schedule.use-case';
+import { ScheduleOutput } from '@core/schedules/application/usecases/common/schedule.use-case.mapper.types';
+import { SchedulePresenter } from './schedules.presenter';
 
 @Controller('schedules')
 export class SchedulesController {
@@ -34,8 +36,9 @@ export class SchedulesController {
   private listUseCase: ListScheduleUseCase;
 
   @Post()
-  create(@Body() createScheduleDto: CreateScheduleDto) {
-    return this.createUseCase.execute(createScheduleDto);
+  async create(@Body() createScheduleDto: CreateScheduleDto) {
+    const output = await this.createUseCase.execute(createScheduleDto);
+    return SchedulesController.serialize(output);
   }
 
   @Get()
@@ -52,4 +55,8 @@ export class SchedulesController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {}
+
+  static serialize(output: ScheduleOutput) {
+    return new SchedulePresenter(output);
+  }
 }
