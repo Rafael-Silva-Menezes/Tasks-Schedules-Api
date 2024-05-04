@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Inject,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
@@ -48,10 +49,16 @@ export class SchedulesController {
   findOne(@Param('id') id: string) {}
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
+  async update(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
     @Body() updateScheduleDto: UpdateScheduleDto,
-  ) {}
+  ) {
+    const output = await this.updateUseCase.execute({
+      ...updateScheduleDto,
+      id,
+    });
+    return SchedulesController.serialize(output);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {}
