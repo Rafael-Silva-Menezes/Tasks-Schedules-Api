@@ -8,6 +8,7 @@ import {
   Delete,
   Inject,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
@@ -17,7 +18,11 @@ import { GetScheduleUseCase } from '@core/schedules/application/usecases/get-use
 import { UpdateScheduleUseCase } from '@core/schedules/application/usecases/update-usecase/update-schedule.use-case';
 import { ListScheduleUseCase } from '@core/schedules/application/usecases/list-usecase/list-schedule.use-case';
 import { ScheduleOutput } from '@core/schedules/application/usecases/common/schedule.use-case.mapper.types';
-import { SchedulePresenter } from './schedules.presenter';
+import {
+  ScheduleCollectionPresenter,
+  SchedulePresenter,
+} from './schedules.presenter';
+import { SearchSchedulesDto } from './dto/search-schedules.dto';
 
 @Controller('schedules')
 export class SchedulesController {
@@ -43,7 +48,10 @@ export class SchedulesController {
   }
 
   @Get()
-  findAll() {}
+  async search(@Query() searchSchedulesDto: SearchSchedulesDto) {
+    const output = await this.listUseCase.execute(searchSchedulesDto);
+    return new ScheduleCollectionPresenter(output);
+  }
 
   @Get(':id')
   async findOne(

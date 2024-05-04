@@ -1,8 +1,8 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { SchedulesController } from './schedules.controller';
-import { DatabaseModule } from 'src/nest-modules/database/database.module';
-import { SchedulesModule } from './schedules.module';
-import { ConfigModule } from '../config/config.module';
+import { DatabaseModule } from 'src/nest-modules/database-module/database.module';
+import { SchedulesController } from '../schedules.controller';
+import { SchedulesModule } from '../schedules.module';
 
 describe('SchedulesController', () => {
   let controller: SchedulesController;
