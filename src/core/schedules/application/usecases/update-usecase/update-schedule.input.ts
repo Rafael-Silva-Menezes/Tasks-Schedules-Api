@@ -1,11 +1,6 @@
-import {
-  IsDate,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  validateSync,
-} from 'class-validator';
+import { IsDate, IsNotEmpty, IsOptional, validateSync } from 'class-validator';
 import { ScheduleInput } from '../common/schedule.use-case.mapper.types';
+import { IsUUID } from 'class-validator';
 
 export type UpdateScheduleInputConstructorProps = Omit<
   ScheduleInput,
@@ -15,11 +10,11 @@ export type UpdateScheduleInputConstructorProps = Omit<
 };
 
 export class UpdateScheduleInput {
-  @IsString()
+  @IsUUID()
   @IsNotEmpty()
   id: string;
 
-  @IsString()
+  @IsUUID()
   @IsOptional()
   agentId?: string;
 
