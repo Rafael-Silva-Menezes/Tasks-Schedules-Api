@@ -61,7 +61,11 @@ export class SchedulesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {}
+  remove(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
+  ) {
+    return this.deleteUseCase.execute({ id });
+  }
 
   static serialize(output: ScheduleOutput) {
     return new SchedulePresenter(output);
