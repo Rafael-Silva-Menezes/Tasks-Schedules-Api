@@ -46,7 +46,12 @@ export class SchedulesController {
   findAll() {}
 
   @Get(':id')
-  findOne(@Param('id') id: string) {}
+  async findOne(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
+  ) {
+    const output = await this.getUseCase.execute({ id });
+    return SchedulesController.serialize(output);
+  }
 
   @Patch(':id')
   async update(
@@ -61,10 +66,10 @@ export class SchedulesController {
   }
 
   @Delete(':id')
-  remove(
+  async remove(
     @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
   ) {
-    return this.deleteUseCase.execute({ id });
+    return await this.deleteUseCase.execute({ id });
   }
 
   static serialize(output: ScheduleOutput) {
