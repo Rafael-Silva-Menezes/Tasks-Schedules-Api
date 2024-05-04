@@ -86,27 +86,27 @@ export class ScheduleFakeBuilder<TBuild = any> {
   }
 
   get scheduleId() {
-    return this._scheduleId;
+    return this.getValue('scheduleId');
   }
 
   get accountId() {
-    return this._accountId;
+    return this.getValue('accountId');
   }
 
   get agentId() {
-    return this._agentId;
+    return this.getValue('agentId');
   }
 
   get startTime() {
-    return this._startTime;
+    return this.getValue('startTime');
   }
 
   get endTime() {
-    return this._endTime;
+    return this.getValue('endTime');
   }
 
   get createdAt() {
-    return this._createdAt;
+    return this.getValue('createdAt');
   }
 
   private getValue(prop: any) {

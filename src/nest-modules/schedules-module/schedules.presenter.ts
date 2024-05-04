@@ -1,8 +1,5 @@
 import { ScheduleOutput } from '@core/schedules/application/usecases/common/schedule.use-case.mapper.types';
-import {
-  ListSchedulesInput,
-  ListSchedulesOutput,
-} from '@core/schedules/application/usecases/list-usecase/list-schedule.use-case.interface';
+import { ListSchedulesOutput } from '@core/schedules/application/usecases/list-usecase/list-schedule.use-case.interface';
 import { Transform } from 'class-transformer';
 import { CollectionPresenter } from '../shared-module/collection.presenter';
 
