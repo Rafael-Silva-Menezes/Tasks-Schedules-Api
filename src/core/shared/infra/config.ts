@@ -3,10 +3,9 @@ import { join } from 'path';
 
 export class Config {
   static env: any = null;
-  
+
   static db() {
     Config.readEnv();
-    
 
     return {
       dialect: 'sqlite' as any,

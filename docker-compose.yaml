@@ -1,11 +1,15 @@
 version: '3'
 
 services:
-  app:
-    build: .
-    command: ./.docker/start.sh
-    ## Remember do permission with chmod +x ./.docker/start.sh
-    ports: 
-     - 3000:3000
-    volumes:
-     - .:/home/node/app
+  db:
+    image: postgres:alpine3.16
+    restart: always
+    container_name: nest-api-db
+    environment:
+      POSTGRES_DB: nest_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    tmpfs:
+      - /var/lib/postgresql/data
+    ports:
+      - '35432:5432'
