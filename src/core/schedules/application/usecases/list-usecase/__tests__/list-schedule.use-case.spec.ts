@@ -40,7 +40,7 @@ describe('ListSchedulesUseCase Unit Tests', () => {
       items: [...items].reverse().map(ScheduleMapper.toOutput),
       total: 3,
       current_page: 1,
-      per_page: 15,
+      per_page: 5,
       last_page: 1,
     });
   });

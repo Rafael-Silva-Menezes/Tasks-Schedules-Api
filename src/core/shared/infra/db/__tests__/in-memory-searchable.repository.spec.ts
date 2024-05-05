@@ -156,10 +156,10 @@ describe('InMemorySearchableRepository Unit Tests', () => {
       const result = await repository.search(new SearchParams());
       expect(result).toStrictEqual(
         new SearchResult({
-          items: Array(15).fill(entity),
+          items: Array(5).fill(entity),
           total: 16,
           current_page: 1,
-          per_page: 15,
+          per_page: 5,
         }),
       );
     });

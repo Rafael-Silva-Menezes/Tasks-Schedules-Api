@@ -434,7 +434,7 @@ export class ListSchedulesFixture {
           meta: {
             current_page: 1,
             last_page: 1,
-            per_page: 15,
+            per_page: 5,
             total: 4,
           },
         },

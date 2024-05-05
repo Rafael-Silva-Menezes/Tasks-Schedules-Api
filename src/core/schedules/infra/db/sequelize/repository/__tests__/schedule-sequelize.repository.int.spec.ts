@@ -101,12 +101,12 @@ describe('ScheduleSequelizeRepository Integration Tests', () => {
 
       const searchOutput = await repository.search(new ScheduleSearchParams());
       expect(searchOutput).toBeInstanceOf(ScheduleSearchResult);
-      expect(spyToEntity).toHaveBeenCalledTimes(15);
+      expect(spyToEntity).toHaveBeenCalledTimes(5);
       expect(searchOutput.toJSON()).toMatchObject({
         total: 16,
         current_page: 1,
-        last_page: 2,
-        per_page: 15,
+        last_page: 4,
+        per_page: 5,
       });
       searchOutput.items.forEach((item) => {
         expect(item).toBeInstanceOf(Schedule);
@@ -114,7 +114,7 @@ describe('ScheduleSequelizeRepository Integration Tests', () => {
       });
       const items = searchOutput.items.map((item) => item.toJson());
       expect(items).toMatchObject(
-        new Array(15).fill({
+        new Array(5).fill({
           accountId: accountId.id,
           agentId: agentId.id,
           createdAt,

@@ -29,7 +29,7 @@ describe('ListSchedulesUseCase Integration Tests', () => {
       items: [...schedules].reverse().map(ScheduleMapper.toOutput),
       total: 2,
       current_page: 1,
-      per_page: 15,
+      per_page: 5,
       last_page: 1,
     });
   });
