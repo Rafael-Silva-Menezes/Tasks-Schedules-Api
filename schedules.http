@@ -2,7 +2,7 @@
 GET http://localhost:3000/schedules
 
 ###
-GET http://localhost:3000/schedules/82cf8888-11bf-4dd0-bd9e-0282d81764c7
+GET http://localhost:3000/schedules/3d3bb083-4fb1-45f8-ae04-496cc6597359
 
 ###
 POST http://localhost:3000/schedules

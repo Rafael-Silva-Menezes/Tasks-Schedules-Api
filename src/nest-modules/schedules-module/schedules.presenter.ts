@@ -7,9 +7,7 @@ export class SchedulePresenter {
   id: string;
   accountId: string;
   agentId: string | null;
-  @Transform(({ value }) => new Date(value).toISOString())
   startTime: Date | null;
-  @Transform(({ value }) => new Date(value).toISOString())
   endTime: Date | null;
   @Transform(({ value }: { value: Date }) => value.toISOString())
   createdAt: Date;

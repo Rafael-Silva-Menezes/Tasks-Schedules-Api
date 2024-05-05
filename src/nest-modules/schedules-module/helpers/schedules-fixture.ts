@@ -2,10 +2,11 @@ import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
 import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
 const _keysInResponse = [
   'id',
-  'name',
-  'description',
-  'is_active',
-  'created_at',
+  'accountId',
+  'agentId',
+  'startTime',
+  'endTime',
+  'createdAt',
 ];
 
 export class GetScheduleFixture {
