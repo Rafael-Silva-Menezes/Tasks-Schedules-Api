@@ -43,6 +43,7 @@ export class CreateScheduleFixture {
           startTime: faker.startTime,
           endTime: faker.endTime,
         },
+        title: 'all fields',
       },
       {
         send_data: {
@@ -55,60 +56,50 @@ export class CreateScheduleFixture {
           startTime: null,
           endTime: null,
         },
+        title: 'accountId and agentId',
       },
       {
         send_data: {
-          accountId: faker.accountId,
+          accountId: faker.accountId.id,
           startTime: faker.startTime,
           endTime: faker.endTime,
         },
         expected: {
-          accountId: faker.accountId,
+          accountId: faker.accountId.id,
           agentId: null,
           startTime: faker.startTime,
           endTime: faker.endTime,
         },
+        title: 'accountId, startTime and endTime',
       },
       {
         send_data: {
-          accountId: faker.accountId,
+          accountId: faker.accountId.id,
           agentId: null,
           startTime: faker.startTime,
         },
         expected: {
-          accountId: faker.accountId,
+          accountId: faker.accountId.id,
           agentId: null,
           startTime: faker.startTime,
           endTime: null,
         },
+        title: 'accountId and startTime',
       },
       {
         send_data: {
-          accountId: faker.accountId,
-          agentId: null,
-          startTime: faker.startTime,
-          endTime: faker.endTime,
-        },
-        expected: {
-          accountId: faker.accountId,
-          agentId: null,
-          startTime: faker.startTime,
-          endTime: faker.endTime,
-        },
-      },
-      {
-        send_data: {
-          accountId: faker.accountId,
+          accountId: faker.accountId.id,
           agentId: null,
           startTime: null,
           endTime: null,
         },
         expected: {
-          accountId: faker.accountId,
+          accountId: faker.accountId.id,
           agentId: null,
           startTime: null,
           endTime: null,
         },
+        title: 'only required fields',
       },
     ];
   }
@@ -276,25 +267,25 @@ export class UpdateScheduleFixture {
     return [
       {
         send_data: {
-          agentId: faker.agentId,
+          agentId: faker.agentId.id,
           startTime: faker.startTime,
           endTime: faker.endTime,
         },
         expected: {
-          accountId: faker.accountId,
-          agentId: faker.agentId,
+          accountId: faker.accountId.id,
+          agentId: faker.agentId.id,
           startTime: faker.startTime,
           endTime: faker.endTime,
         },
       },
       {
         send_data: {
-          agentId: faker.agentId,
+          agentId: faker.agentId.id,
           startTime: faker.startTime,
         },
         expected: {
-          accountId: faker.accountId,
-          agentId: faker.agentId,
+          accountId: faker.accountId.id,
+          agentId: faker.agentId.id,
           startTime: faker.startTime,
           endTime: null,
         },
@@ -305,7 +296,7 @@ export class UpdateScheduleFixture {
           endTime: faker.endTime,
         },
         expected: {
-          accountId: faker.accountId,
+          accountId: faker.accountId.id,
           agentId: null,
           startTime: faker.startTime,
           endTime: faker.endTime,
@@ -313,11 +304,11 @@ export class UpdateScheduleFixture {
       },
       {
         send_data: {
-          agentId: faker.agentId,
+          agentId: faker.agentId.id,
         },
         expected: {
-          accountId: faker.accountId,
-          agentId: faker.agentId,
+          accountId: faker.accountId.id,
+          agentId: faker.agentId.id,
           startTime: null,
           endTime: null,
         },
@@ -484,12 +475,12 @@ export class ListSchedulesFixture {
     const faker = Schedule.fake().aSchedule();
 
     const entitiesMap = {
-      1: faker.withAccountId(new Uuid()).build(),
-      2: faker.withAccountId(new Uuid()).build(),
-      3: faker.withAccountId(new Uuid()).build(),
-      4: faker.withAccountId(new Uuid()).build(),
-      5: faker.withAccountId(new Uuid()).build(),
-      6: faker.withAccountId(new Uuid()).build(),
+      first: faker.withAccountId(new Uuid()).build(),
+      second: faker.withAccountId(new Uuid()).build(),
+      third: faker.withAccountId(new Uuid()).build(),
+      four: faker.withAccountId(new Uuid()).build(),
+      five: faker.withAccountId(new Uuid()).build(),
+      six: faker.withAccountId(new Uuid()).build(),
     };
 
     const arrange = [
@@ -499,7 +490,7 @@ export class ListSchedulesFixture {
           per_page: 2,
         },
         expected: {
-          entities: [entitiesMap[1], entitiesMap[2]],
+          entities: [entitiesMap.first, entitiesMap.second],
           meta: {
             total: 6,
             current_page: 1,

@@ -28,6 +28,7 @@ export class ScheduleSequelizeRepository implements IScheduleRepository {
     const id = schedule.getScheduleId().id;
 
     const modelProps = ScheduleModelMapper.toModel(schedule);
+
     const [affectedRows] = await this.scheduleModel.update(
       modelProps.toJSON(),
       {

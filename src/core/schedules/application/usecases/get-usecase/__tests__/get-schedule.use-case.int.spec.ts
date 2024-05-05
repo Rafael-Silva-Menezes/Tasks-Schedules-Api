@@ -25,7 +25,10 @@ describe('GetScheduleUseCase Integration Tests', () => {
   });
 
   it('should returns a schedule', async () => {
-    const schedule = Schedule.fake().aSchedule().build();
+    const schedule = Schedule.fake()
+      .aSchedule()
+      .withAgentId(new Uuid())
+      .build();
     await repository.insert(schedule);
     const output = await useCase.execute({ id: schedule.getScheduleId().id });
     expect(output).toStrictEqual({

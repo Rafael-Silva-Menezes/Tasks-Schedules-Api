@@ -7,9 +7,9 @@ type PropOrFactory<T> = T | ((index: number) => T);
 export class ScheduleFakeBuilder<TBuild = any> {
   private _scheduleId: PropOrFactory<Uuid> | undefined = undefined;
   private _accountId: PropOrFactory<Uuid> = new Uuid() || undefined;
-  private _agentId: PropOrFactory<Uuid> | undefined = new Uuid() || null;
-  private _startTime: PropOrFactory<Date> = (_index) => new Date() || null;
-  private _endTime: PropOrFactory<Date | null> = (_index) => new Date() || null;
+  private _agentId: PropOrFactory<Uuid> | undefined = null;
+  private _startTime: PropOrFactory<Date> = (_index) => null;
+  private _endTime: PropOrFactory<Date | null> = (_index) => null;
   private _createdAt: PropOrFactory<Date> | undefined = undefined;
 
   private countObjs = 0;

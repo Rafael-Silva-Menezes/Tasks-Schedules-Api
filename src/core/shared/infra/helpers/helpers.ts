@@ -1,5 +1,5 @@
-import { Sequelize, SequelizeOptions } from "sequelize-typescript";
-import { Config } from "../config";
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
+import { Config } from '../config';
 
 export function setupSequelize(options: SequelizeOptions = {}) {
   let _sequelize: Sequelize;
@@ -12,7 +12,15 @@ export function setupSequelize(options: SequelizeOptions = {}) {
   });
 
   beforeEach(async () => await _sequelize.sync({ force: true }));
-
+  afterEach(async () => {
+    // Limpeza do banco de dados
+    const modelNames = Object.keys(_sequelize.models);
+    await Promise.all(
+      modelNames.map((modelName) =>
+        _sequelize.models[modelName].destroy({ truncate: true, cascade: true }),
+      ),
+    );
+  });
   afterAll(async () => await _sequelize.close());
 
   return {

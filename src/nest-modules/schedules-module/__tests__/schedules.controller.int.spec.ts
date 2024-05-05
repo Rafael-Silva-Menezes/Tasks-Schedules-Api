@@ -1,4 +1,3 @@
-import { ConfigModule } from '@nestjs/config';
 import { TestingModule, Test } from '@nestjs/testing';
 import { DatabaseModule } from 'src/nest-modules/database-module/database.module';
 import { SchedulesController } from '../schedules.controller';
@@ -10,6 +9,20 @@ import { DeleteScheduleUseCase } from '@core/schedules/application/usecases/dele
 import { GetScheduleUseCase } from '@core/schedules/application/usecases/get-usecase/get-schedule.use-case';
 import { UpdateScheduleUseCase } from '@core/schedules/application/usecases/update-usecase/update-schedule.use-case';
 import { ListScheduleUseCase } from '@core/schedules/application/usecases/list-usecase/list-schedule.use-case';
+import {
+  CreateScheduleFixture,
+  ListSchedulesFixture,
+  UpdateScheduleFixture,
+} from '../helpers/schedules-fixture';
+import {
+  ScheduleCollectionPresenter,
+  SchedulePresenter,
+} from '../schedules.presenter';
+import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
+import { ScheduleMapper } from '@core/schedules/application/usecases/common/schedule.use-case.mapper';
+import { ConfigModule } from 'src/nest-modules/config-module/config.module';
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
+import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
 
 describe('SchedulesController Integration Tests', () => {
   let controller: SchedulesController;
@@ -34,7 +47,108 @@ describe('SchedulesController Integration Tests', () => {
     expect(controller['deleteUseCase']).toBeInstanceOf(DeleteScheduleUseCase);
   });
 
-  it('should create a category', () => {});
+  describe('should create a schedule', () => {
+    const arrange = CreateScheduleFixture.arrangeForCreate();
+    test.each(arrange)(
+      'should send $title',
+      async ({ send_data, expected }) => {
+        const presenter = await controller.create(send_data);
+        const entity = await repository.findById(new Uuid(presenter.id));
+        const output = ScheduleMapper.toOutput(entity);
+        expect(presenter).toEqual(new SchedulePresenter(output));
+      },
+    );
+  });
 
-  it('should update a category', () => {});
+  describe('should update a category', () => {
+    const arrange = UpdateScheduleFixture.arrangeForUpdate();
+
+    const schedule = Schedule.fake().aSchedule().build();
+
+    beforeEach(async () => {
+      await repository.insert(schedule);
+    });
+
+    afterEach(async () => {
+      await repository.delete(schedule.getScheduleId());
+    });
+
+    test.each(arrange)(
+      'when body is $send_data',
+      async ({ send_data, expected }) => {
+        const presenter = await controller.update(
+          schedule.getScheduleId().id,
+          send_data,
+        );
+        const entity = await repository.findById(new Uuid(presenter.id));
+
+        expect(entity.toJson()).toStrictEqual({
+          scheduleId: presenter.id,
+          createdAt: presenter.createdAt,
+          accountId: presenter.accountId,
+          agentId: expected.agentId ?? null,
+          startTime: expected.startTime ?? null,
+          endTime: expected.endTime ?? null,
+        });
+        const output = ScheduleMapper.toOutput(entity);
+        expect(presenter).toEqual(new SchedulePresenter(output));
+      },
+    );
+  });
+
+  describe('should delete a schedule', () => {
+    it('should send a id exist', async () => {
+      const schedule = Schedule.fake().aSchedule().build();
+      await repository.insert(schedule);
+      const response = await controller.remove(schedule.getScheduleId().id);
+      expect(response).not.toBeDefined();
+      await expect(
+        repository.findById(schedule.getScheduleId()),
+      ).resolves.toBeNull();
+    });
+  });
+
+  describe('should get a schedule', () => {
+    it('should get a category', async () => {
+      const schedule = Schedule.fake()
+        .aSchedule()
+        .withAgentId(new Uuid())
+        .build();
+
+      await repository.insert(schedule);
+      const presenter = await controller.findOne(schedule.getScheduleId().id);
+
+      expect(presenter.id).toBe(schedule.getScheduleId().id);
+      expect(presenter.accountId).toBe(schedule.getAccountId().id);
+      expect(presenter.agentId).toBe(schedule.getAgentId().id);
+      expect(presenter.startTime).toStrictEqual(schedule.getStartTime());
+      expect(presenter.endTime).toStrictEqual(schedule.getEndTime());
+      expect(presenter.createdAt).toStrictEqual(schedule.getCreatedAt());
+    });
+  });
+
+  describe('search method', () => {
+    describe('should sorted categories by created_at', () => {
+      const { entitiesMap, arrange } =
+        ListSchedulesFixture.arrangeIncrementedWithCreatedAt();
+
+      beforeEach(async () => {
+        await repository.bulkInsert(Object.values(entitiesMap));
+      });
+
+      test.each(arrange)(
+        'when send_data is $send_data',
+        async ({ send_data, expected }) => {
+          const presenter = await controller.search(send_data);
+          const { entities, ...paginationProps } = expected;
+          expect(presenter).toEqual(
+            new ScheduleCollectionPresenter({
+              items: entities.map(ScheduleMapper.toOutput),
+              ...paginationProps.meta,
+            }),
+          );
+        },
+      );
+    });
+  });
 });
