@@ -49,6 +49,7 @@ describe('SchedulesController Integration Tests', () => {
 
   describe('should create a schedule', () => {
     const arrange = CreateScheduleFixture.arrangeForCreate();
+
     test.each(arrange)(
       'should send $title',
       async ({ send_data, expected }) => {
@@ -67,10 +68,6 @@ describe('SchedulesController Integration Tests', () => {
 
     beforeEach(async () => {
       await repository.insert(schedule);
-    });
-
-    afterEach(async () => {
-      await repository.delete(schedule.getScheduleId());
     });
 
     test.each(arrange)(

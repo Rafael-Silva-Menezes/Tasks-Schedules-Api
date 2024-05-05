@@ -6,6 +6,7 @@ import {
   IsUUID,
 } from 'class-validator';
 import { ScheduleInput } from '../common/schedule.use-case.mapper.types';
+import { Type } from 'class-transformer';
 
 export type CreateScheduleInputConstructorProps = ScheduleInput;
 
@@ -18,10 +19,13 @@ export class CreateScheduleInput {
   @IsOptional()
   agentId?: string;
 
+  @Type(() => Date)
   @IsDate()
   @IsOptional()
   startTime?: Date;
 
+  @Type(() => Date)
+  @IsDate()
   @IsDate()
   @IsOptional()
   endTime?: Date;

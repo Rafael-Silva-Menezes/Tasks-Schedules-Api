@@ -12,15 +12,6 @@ export function setupSequelize(options: SequelizeOptions = {}) {
   });
 
   beforeEach(async () => await _sequelize.sync({ force: true }));
-  afterEach(async () => {
-    // Limpeza do banco de dados
-    const modelNames = Object.keys(_sequelize.models);
-    await Promise.all(
-      modelNames.map((modelName) =>
-        _sequelize.models[modelName].destroy({ truncate: true, cascade: true }),
-      ),
-    );
-  });
   afterAll(async () => await _sequelize.close());
 
   return {

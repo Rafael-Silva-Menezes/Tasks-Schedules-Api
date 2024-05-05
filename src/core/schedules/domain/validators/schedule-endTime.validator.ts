@@ -1,4 +1,8 @@
-import { ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments } from 'class-validator';
+import {
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+  ValidationArguments,
+} from 'class-validator';
 
 interface ScheduleObject {
   startTime?: Date;
@@ -13,19 +17,14 @@ export class IsValidEndTimeConstraint implements ValidatorConstraintInterface {
     const endTime = scheduleObject.endTime;
 
     if (!endTime) {
-      return true; 
+      return true;
     }
 
     if (!startTime) {
-      return false; 
+      return false;
     }
 
-    if ((value !== null && !(value instanceof Date)) || (startTime !== null && !(startTime instanceof Date))) {
-      return false; 
-    }
-    
-
-    return value.getTime() >= startTime.getTime(); 
+    return new Date(value).getTime() >= new Date(startTime).getTime();
   }
 
   defaultMessage(args: ValidationArguments) {
