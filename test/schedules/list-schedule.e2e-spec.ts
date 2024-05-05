@@ -1,12 +1,12 @@
 import request from 'supertest';
 import { instanceToPlain } from 'class-transformer';
-import * as ScheduleProviders from '../../src/nest-modules/schedules-module/schedules.providers';
+
+import { ScheduleMapper } from '@core/schedules/application/usecases/common/schedule.use-case.mapper';
 import { IScheduleRepository } from '@core/schedules/domain/interfaces/schedule.repository';
 import { ListSchedulesFixture } from 'src/nest-modules/schedules-module/helpers/schedules-fixture';
-import { startApp } from 'src/nest-modules/shared-module/helpers/helpers';
 import { SchedulesController } from 'src/nest-modules/schedules-module/schedules.controller';
-import { ScheduleMapper } from '@core/schedules/application/usecases/common/schedule.use-case.mapper';
-import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
+import * as ScheduleProviders from 'src/nest-modules/schedules-module/schedules.providers';
+import { startApp } from 'src/nest-modules/shared-module/helpers/helpers';
 
 describe('SchedulesController (e2e)', () => {
   describe('/schedules (GET)', () => {

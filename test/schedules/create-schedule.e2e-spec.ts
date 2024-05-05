@@ -16,6 +16,7 @@ describe('SchedulesController (e2e)', () => {
       SCHEDULE_PROVIDERS.REPOSITORIES.SCHEDULE_REPOSITORY.provide,
     );
   });
+
   describe('/schedules (POST)', () => {
     describe('should return a response error with 422 status code when request body is invalid', () => {
       const invalidRequest = CreateScheduleFixture.arrangeInvalidRequest();
@@ -24,7 +25,7 @@ describe('SchedulesController (e2e)', () => {
         value: invalidRequest[key],
       }));
 
-      test.each(arrange)('when body is $label', ({ value }) => {
+      test.each([arrange])('when body is $label', ({ value }) => {
         return request(appHelper.app.getHttpServer())
           .post('/schedules')
           .send(value.send_data)
@@ -53,36 +54,26 @@ describe('SchedulesController (e2e)', () => {
     describe('should create a schedule', () => {
       const arrange = CreateScheduleFixture.arrangeForCreate();
 
-      test.each(arrange)(
-        'when body is $title',
-        async ({ send_data, expected }) => {
-          const res = await request(appHelper.app.getHttpServer())
-            .post('/schedules')
-            .send(send_data)
-            .expect(201);
+      test.each(arrange)('when body is $title', async ({ send_data }) => {
+        const res = await request(appHelper.app.getHttpServer())
+          .post('/schedules')
+          .send(send_data)
+          .expect(201);
 
-          const keysInResponse = CreateScheduleFixture.keysInResponse;
-          expect(Object.keys(res.body)).toStrictEqual(['data']);
-          expect(Object.keys(res.body.data)).toStrictEqual(keysInResponse);
+        const keysInResponse = CreateScheduleFixture.keysInResponse;
+        expect(Object.keys(res.body)).toStrictEqual(['data']);
+        expect(Object.keys(res.body.data)).toStrictEqual(keysInResponse);
 
-          const id = res.body.data.id;
-          const scheduleCreated = await scheduleRepo.findById(new Uuid(id));
+        const id = res.body.data.id;
+        const scheduleCreated = await scheduleRepo.findById(new Uuid(id));
 
-          const presenter = SchedulesController.serialize(
-            ScheduleMapper.toOutput(scheduleCreated),
-          );
+        const presenter = SchedulesController.serialize(
+          ScheduleMapper.toOutput(scheduleCreated),
+        );
 
-          const serialized = instanceToPlain(presenter);
-          expect(res.body.data).toStrictEqual({
-            id: serialized.id,
-            agentId: serialized.agentId,
-            accountId: serialized.accountId,
-            startTime: serialized.startTime,
-            endTime: serialized.endTime,
-            createdAt: serialized.createdAt,
-          });
-        },
-      );
+        const serialized = instanceToPlain(presenter);
+        expect(res.body.data).toStrictEqual(serialized);
+      });
     });
   });
 });

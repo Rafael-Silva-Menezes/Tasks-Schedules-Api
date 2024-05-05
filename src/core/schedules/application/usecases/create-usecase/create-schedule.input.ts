@@ -26,7 +26,6 @@ export class CreateScheduleInput {
 
   @Type(() => Date)
   @IsDate()
-  @IsDate()
   @IsOptional()
   endTime?: Date;
 

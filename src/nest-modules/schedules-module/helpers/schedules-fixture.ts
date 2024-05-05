@@ -28,32 +28,33 @@ export class CreateScheduleFixture {
       .withAccountId(this.accountId)
       .withAgentId(this.agentId)
       .withStartTime(this.startTime)
-      .withEndTime(this.endTime);
+      .withEndTime(this.endTime)
+      .build();
 
     return [
       {
         send_data: {
-          accountId: faker.accountId.id,
-          agentId: faker.agentId.id,
-          startTime: faker.startTime,
-          endTime: faker.endTime,
+          accountId: faker.getAccountId().id,
+          agentId: faker.getAgentId().id,
+          startTime: faker.getStartTime(),
+          endTime: faker.getEndTime(),
         },
         expected: {
-          accountId: faker.accountId.id,
-          agentId: faker.agentId.id,
-          startTime: faker.startTime,
-          endTime: faker.endTime,
+          accountId: faker.getAccountId().id,
+          agentId: faker.getAgentId().id,
+          startTime: faker.getStartTime().toISOString(),
+          endTime: faker.getEndTime().toISOString(),
         },
         title: 'all fields',
       },
       {
         send_data: {
-          accountId: faker.accountId.id,
-          agentId: faker.agentId.id,
+          accountId: faker.getAccountId().id,
+          agentId: faker.getAgentId().id,
         },
         expected: {
-          accountId: faker.accountId.id,
-          agentId: faker.agentId.id,
+          accountId: faker.getAccountId().id,
+          agentId: faker.getAgentId().id,
           startTime: null,
           endTime: null,
         },
@@ -61,41 +62,41 @@ export class CreateScheduleFixture {
       },
       {
         send_data: {
-          accountId: faker.accountId.id,
-          startTime: faker.startTime,
-          endTime: faker.endTime,
+          accountId: faker.getAccountId().id,
+          startTime: faker.getStartTime(),
+          endTime: faker.getEndTime(),
         },
         expected: {
-          accountId: faker.accountId.id,
+          accountId: faker.getAccountId().id,
           agentId: null,
-          startTime: faker.startTime,
-          endTime: faker.endTime,
+          startTime: faker.getStartTime().toISOString(),
+          endTime: faker.getEndTime().toISOString(),
         },
         title: 'accountId, startTime and endTime',
       },
       {
         send_data: {
-          accountId: faker.accountId.id,
+          accountId: faker.getAccountId().id,
           agentId: null,
-          startTime: faker.startTime,
+          startTime: faker.getEndTime(),
         },
         expected: {
-          accountId: faker.accountId.id,
+          accountId: faker.getAccountId().id,
           agentId: null,
-          startTime: faker.startTime,
+          startTime: faker.getStartTime().toISOString(),
           endTime: null,
         },
         title: 'accountId and startTime',
       },
       {
         send_data: {
-          accountId: faker.accountId.id,
+          accountId: faker.getAccountId().id,
           agentId: null,
           startTime: null,
           endTime: null,
         },
         expected: {
-          accountId: faker.accountId.id,
+          accountId: faker.getAccountId().id,
           agentId: null,
           startTime: null,
           endTime: null,
@@ -265,53 +266,54 @@ export class UpdateScheduleFixture {
       .withAccountId(this.accountId)
       .withAgentId(this.agentId)
       .withStartTime(this.startTime)
-      .withEndTime(this.endTime);
+      .withEndTime(this.endTime)
+      .build();
 
     return [
       {
         send_data: {
-          agentId: faker.agentId.id,
-          startTime: faker.startTime,
-          endTime: faker.endTime,
+          agentId: faker.getAgentId().id,
+          startTime: faker.getStartTime(),
+          endTime: faker.getEndTime(),
         },
         expected: {
-          accountId: faker.accountId.id,
-          agentId: faker.agentId.id,
-          startTime: faker.startTime,
-          endTime: faker.endTime,
+          accountId: faker.getAccountId().id,
+          agentId: faker.getAgentId().id,
+          startTime: faker.getStartTime().toISOString(),
+          endTime: faker.getEndTime().toISOString(),
         },
       },
       {
         send_data: {
-          agentId: faker.agentId.id,
-          startTime: faker.startTime,
+          agentId: faker.getAgentId().id,
+          startTime: faker.getStartTime(),
         },
         expected: {
-          accountId: faker.accountId.id,
-          agentId: faker.agentId.id,
-          startTime: faker.startTime,
+          accountId: faker.getAccountId().id,
+          agentId: faker.getAgentId().id,
+          startTime: faker.getStartTime().toISOString(),
           endTime: null,
         },
       },
       {
         send_data: {
-          startTime: faker.startTime,
-          endTime: faker.endTime,
+          startTime: faker.getStartTime(),
+          endTime: faker.getEndTime(),
         },
         expected: {
-          accountId: faker.accountId.id,
+          accountId: faker.getAccountId().id,
           agentId: null,
-          startTime: faker.startTime,
-          endTime: faker.endTime,
+          startTime: faker.getStartTime().toISOString(),
+          endTime: faker.getEndTime().toISOString(),
         },
       },
       {
         send_data: {
-          agentId: faker.agentId.id,
+          agentId: faker.getAgentId().id,
         },
         expected: {
-          accountId: faker.accountId.id,
-          agentId: faker.agentId.id,
+          accountId: faker.getAccountId().id,
+          agentId: faker.getAgentId().id,
           startTime: null,
           endTime: null,
         },
@@ -340,11 +342,7 @@ export class UpdateScheduleFixture {
           agentId: 5,
         },
         expected: {
-          message: [
-            'accountId should not be empty',
-            'accountId must be a UUID',
-            'agentId must be a UUID',
-          ],
+          message: ['agentId must be a UUID'],
           ...defaultExpected,
         },
       },
@@ -372,7 +370,7 @@ export class UpdateScheduleFixture {
   }
 
   static arrangeForEntityValidationError() {
-    const faker = Schedule.fake().aSchedule();
+    const faker = Schedule.fake().aSchedule().withEndTime(new Date()).build();
     const defaultExpected = {
       statusCode: 422,
       error: 'Unprocessable Entity',
@@ -381,7 +379,7 @@ export class UpdateScheduleFixture {
     return {
       END_TIME_WITHOUT_START_TIME: {
         send_data: {
-          endTime: faker.withEndTime(new Date()).endTime,
+          endTime: faker.getEndTime(),
         },
         expected: {
           message: ['startTime must be defined before endTime'],
