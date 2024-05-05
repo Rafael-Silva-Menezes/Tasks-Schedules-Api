@@ -18,6 +18,7 @@ const config: Config = {
     'validator-rules.ts',
     '-fixture.ts',
     '.input.ts',
+    'index.ts',
     '.d.ts',
   ],
   coverageThreshold: {
