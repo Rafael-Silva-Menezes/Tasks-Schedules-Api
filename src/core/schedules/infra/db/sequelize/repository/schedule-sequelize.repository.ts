@@ -5,14 +5,19 @@ import {
   ScheduleSearchResult,
 } from '@core/schedules/domain/interfaces/schedule.repository';
 import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
-import { Op } from 'sequelize';
+import { literal, Op } from 'sequelize';
 import { ScheduleModelMapper } from '../model/schedule-mapper.model';
 import { ScheduleModel } from '../model/schedule.model';
 import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
+import { SortDirection } from '@core/shared/domain/repository/search/search-params';
 
 export class ScheduleSequelizeRepository implements IScheduleRepository {
   sortableFields: string[] = ['createdAt'];
-
+  orderBy = {
+    posts: {
+      name: (sort_dir: SortDirection) => literal(`binary name ${sort_dir}`), //ascii
+    },
+  };
   constructor(private scheduleModel: typeof ScheduleModel) {}
   async insert(schedule: Schedule): Promise<void> {
     const modelProps = ScheduleModelMapper.toModel(schedule);
@@ -80,7 +85,7 @@ export class ScheduleSequelizeRepository implements IScheduleRepository {
         },
       }),
       ...(props.sort && this.sortableFields.includes(props.sort)
-        ? { order: [[props.sort, props.sort_dir]] }
+        ? { order: this.formatSort(props.sort, props.sort_dir) }
         : { order: [['createdAt', 'desc']] }),
       offset,
       limit,
@@ -94,6 +99,14 @@ export class ScheduleSequelizeRepository implements IScheduleRepository {
       per_page: props.per_page,
       total: count,
     });
+  }
+
+  private formatSort(sort: string, sort_dir: SortDirection) {
+    const dialect = this.scheduleModel.sequelize.getDialect() as 'mysql';
+    if (this.orderBy[dialect] && this.orderBy[dialect][sort]) {
+      return this.orderBy[dialect][sort](sort_dir);
+    }
+    return [[sort, sort_dir]];
   }
 
   private async _get(id: string) {
