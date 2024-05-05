@@ -17,45 +17,80 @@ describe('SchedulesController (e2e)', () => {
     );
   });
   describe('/schedules (POST)', () => {
-    const arrange = CreateScheduleFixture.arrangeForCreate();
+    describe('should return a response error with 422 status code when request body is invalid', () => {
+      const invalidRequest = CreateScheduleFixture.arrangeInvalidRequest();
+      const arrange = Object.keys(invalidRequest).map((key) => ({
+        label: key,
+        value: invalidRequest[key],
+      }));
 
-    test.each(arrange)(
-      'when body is $title',
-      async ({ send_data, expected }) => {
-        const res = await request(appHelper.app.getHttpServer())
+      test.each(arrange)('when body is $label', ({ value }) => {
+        return request(appHelper.app.getHttpServer())
           .post('/schedules')
-          .send(send_data)
-          .expect(201);
+          .send(value.send_data)
+          .expect(422)
+          .expect(value.expected);
+      });
+    });
 
-        const keysInResponse = CreateScheduleFixture.keysInResponse;
-        expect(Object.keys(res.body)).toStrictEqual(['data']);
-        expect(Object.keys(res.body.data)).toStrictEqual(keysInResponse);
+    describe('should return a response error with 422 status code when throw EntityValidationError', () => {
+      const invalidRequest =
+        CreateScheduleFixture.arrangeForEntityValidationError();
+      const arrange = Object.keys(invalidRequest).map((key) => ({
+        label: key,
+        value: invalidRequest[key],
+      }));
 
-        const id = res.body.data.id;
-        const scheduleCreated = await scheduleRepo.findById(new Uuid(id));
+      test.each(arrange)('when body is $label', ({ value }) => {
+        return request(appHelper.app.getHttpServer())
+          .post('/schedules')
+          .send(value.send_data)
+          .expect(422)
+          .expect(value.expected);
+      });
+    });
 
-        const presenter = SchedulesController.serialize(
-          ScheduleMapper.toOutput(scheduleCreated),
-        );
+    describe('should create a schedule', () => {
+      const arrange = CreateScheduleFixture.arrangeForCreate();
 
-        const serialized = instanceToPlain(presenter);
-        const startTimeExpected = serialized.startTime
-          ? serialized.startTime.toISOString()
-          : null;
+      test.each(arrange)(
+        'when body is $title',
+        async ({ send_data, expected }) => {
+          const res = await request(appHelper.app.getHttpServer())
+            .post('/schedules')
+            .send(send_data)
+            .expect(201);
 
-        const endTimeExpected = serialized.endTime
-          ? serialized.endTime.toISOString()
-          : null;
+          const keysInResponse = CreateScheduleFixture.keysInResponse;
+          expect(Object.keys(res.body)).toStrictEqual(['data']);
+          expect(Object.keys(res.body.data)).toStrictEqual(keysInResponse);
 
-        expect(res.body.data).toStrictEqual({
-          id: serialized.id,
-          agentId: serialized.agentId,
-          accountId: serialized.accountId,
-          startTime: startTimeExpected,
-          endTime: endTimeExpected,
-          createdAt: serialized.createdAt,
-        });
-      },
-    );
+          const id = res.body.data.id;
+          const scheduleCreated = await scheduleRepo.findById(new Uuid(id));
+
+          const presenter = SchedulesController.serialize(
+            ScheduleMapper.toOutput(scheduleCreated),
+          );
+
+          const serialized = instanceToPlain(presenter);
+          const startTimeExpected = serialized.startTime
+            ? serialized.startTime.toISOString()
+            : null;
+
+          const endTimeExpected = serialized.endTime
+            ? serialized.endTime.toISOString()
+            : null;
+
+          expect(res.body.data).toStrictEqual({
+            id: serialized.id,
+            agentId: serialized.agentId,
+            accountId: serialized.accountId,
+            startTime: startTimeExpected,
+            endTime: endTimeExpected,
+            createdAt: serialized.createdAt,
+          });
+        },
+      );
+    });
   });
 });

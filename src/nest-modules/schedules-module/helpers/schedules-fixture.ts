@@ -117,7 +117,7 @@ export class CreateScheduleFixture {
         expected: {
           message: [
             'accountId should not be empty',
-            'accountId must be a uuid',
+            'accountId must be a UUID',
           ],
           ...defaultExpected,
         },
@@ -129,7 +129,7 @@ export class CreateScheduleFixture {
         expected: {
           message: [
             'accountId should not be empty',
-            'accountId must be a uuid',
+            'accountId must be a UUID',
           ],
           ...defaultExpected,
         },
@@ -141,7 +141,7 @@ export class CreateScheduleFixture {
         expected: {
           message: [
             'accountId should not be empty',
-            'accountId must be a uuid',
+            'accountId must be a UUID',
           ],
           ...defaultExpected,
         },
@@ -153,7 +153,7 @@ export class CreateScheduleFixture {
         expected: {
           message: [
             'accountId should not be empty',
-            'accountId must be a uuid',
+            'accountId must be a UUID',
           ],
           ...defaultExpected,
         },
@@ -165,8 +165,8 @@ export class CreateScheduleFixture {
         expected: {
           message: [
             'accountId should not be empty',
-            'accountId must be a uuid',
-            'agentId must be a uuid',
+            'accountId must be a UUID',
+            'agentId must be a UUID',
           ],
           ...defaultExpected,
         },
@@ -179,8 +179,8 @@ export class CreateScheduleFixture {
         expected: {
           message: [
             'accountId should not be empty',
-            'accountId must be a uuid',
-            'agentId must be a uuid',
+            'accountId must be a UUID',
+            'agentId must be a UUID',
           ],
           ...defaultExpected,
         },
@@ -193,8 +193,8 @@ export class CreateScheduleFixture {
         expected: {
           message: [
             'accountId should not be empty',
-            'accountId must be a uuid',
-            'startTime must be a Date value',
+            'accountId must be a UUID',
+            'startTime must be a Date instance',
           ],
           ...defaultExpected,
         },
@@ -207,8 +207,8 @@ export class CreateScheduleFixture {
         expected: {
           message: [
             'accountId should not be empty',
-            'accountId must be a uuid',
-            'endTime must be a Date value',
+            'accountId must be a UUID',
+            'endTime must be a Date instance',
           ],
           ...defaultExpected,
         },
@@ -227,6 +227,7 @@ export class CreateScheduleFixture {
     return {
       END_TIME_WITHOUT_START_TIME: {
         send_data: {
+          accountId: faker.accountId.id,
           endTime: faker.withEndTime(new Date()).endTime,
         },
         expected: {
@@ -237,6 +238,7 @@ export class CreateScheduleFixture {
 
       END_TIME_BEFORE_START_TIME: {
         send_data: {
+          accountId: faker.accountId.id,
           startTime: new Date('2024-06-10T09:00:00Z'),
           endTime: new Date('2024-05-10T08:00:00Z'),
         },
@@ -329,7 +331,7 @@ export class UpdateScheduleFixture {
           agentId: '',
         },
         expected: {
-          message: ['agentId must be a uuid'],
+          message: ['agentId must be a UUID'],
           ...defaultExpected,
         },
       },
@@ -340,8 +342,8 @@ export class UpdateScheduleFixture {
         expected: {
           message: [
             'accountId should not be empty',
-            'accountId must be a uuid',
-            'agentId must be a uuid',
+            'accountId must be a UUID',
+            'agentId must be a UUID',
           ],
           ...defaultExpected,
         },
@@ -352,7 +354,7 @@ export class UpdateScheduleFixture {
           startTime: 'a',
         },
         expected: {
-          message: ['startTime must be a Date value'],
+          message: ['startTime must be a Date instance'],
           ...defaultExpected,
         },
       },
@@ -362,7 +364,7 @@ export class UpdateScheduleFixture {
           endTime: 'a',
         },
         expected: {
-          message: ['endTime must be a Date value'],
+          message: ['endTime must be a Date instance'],
           ...defaultExpected,
         },
       },
