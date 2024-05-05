@@ -49,8 +49,8 @@ export class SchedulesController {
   }
 
   @Get()
-  async search(@Query() searchSchedulesDto: SearchSchedulesDto) {
-    const output = await this.listUseCase.execute(searchSchedulesDto);
+  async search(@Query() searchParamsDto: SearchSchedulesDto) {
+    const output = await this.listUseCase.execute(searchParamsDto);
     return new ScheduleCollectionPresenter(output);
   }
 

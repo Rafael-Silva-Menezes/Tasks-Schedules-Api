@@ -408,7 +408,7 @@ export class ListSchedulesFixture {
     const _entities = Schedule.fake()
       .theSchedules(4)
       .withAccountId(() => new Uuid())
-      .withAgentId((i) => new Uuid())
+      .withAgentId(() => new Uuid())
       .withStartTime((i) => new Date(new Date().getTime() + i * 4000))
       .withEndTime((i) => new Date(new Date().getTime() + i * 5000))
       .withCreatedAt((i) => new Date(new Date().getTime() + i * 2000))
@@ -438,6 +438,8 @@ export class ListSchedulesFixture {
             total: 4,
           },
         },
+
+        title: 'empyt send_data',
       },
       {
         send_data: {
@@ -453,6 +455,8 @@ export class ListSchedulesFixture {
             total: 4,
           },
         },
+
+        title: 'page 1, per page 2',
       },
       {
         send_data: {
@@ -468,6 +472,8 @@ export class ListSchedulesFixture {
             total: 4,
           },
         },
+
+        title: 'page 2, per page 2',
       },
     ];
 

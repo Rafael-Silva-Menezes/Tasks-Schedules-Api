@@ -7,8 +7,8 @@ export class SchedulePresenter {
   id: string;
   accountId: string;
   agentId: string | null;
-  startTime: Date | null;
-  endTime: Date | null;
+  startTime: string | null;
+  endTime: string | null;
   @Transform(({ value }: { value: Date }) => value.toISOString())
   createdAt: Date;
 
@@ -16,8 +16,8 @@ export class SchedulePresenter {
     this.id = output.id;
     this.accountId = output.accountId;
     this.agentId = output.agentId;
-    this.startTime = output.startTime;
-    this.endTime = output.endTime;
+    this.startTime = output.startTime ? output.startTime.toISOString() : null;
+    this.endTime = output.endTime ? output.endTime.toISOString() : null;
     this.createdAt = output.createdAt;
   }
 }

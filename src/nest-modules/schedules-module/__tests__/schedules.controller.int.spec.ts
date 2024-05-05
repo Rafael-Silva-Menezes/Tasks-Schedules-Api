@@ -22,7 +22,6 @@ import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
 import { ScheduleMapper } from '@core/schedules/application/usecases/common/schedule.use-case.mapper';
 import { ConfigModule } from 'src/nest-modules/config-module/config.module';
 import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
-import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
 
 describe('SchedulesController Integration Tests', () => {
   let controller: SchedulesController;

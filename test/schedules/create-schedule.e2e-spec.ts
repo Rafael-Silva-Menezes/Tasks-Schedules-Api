@@ -73,20 +73,12 @@ describe('SchedulesController (e2e)', () => {
           );
 
           const serialized = instanceToPlain(presenter);
-          const startTimeExpected = serialized.startTime
-            ? serialized.startTime.toISOString()
-            : null;
-
-          const endTimeExpected = serialized.endTime
-            ? serialized.endTime.toISOString()
-            : null;
-
           expect(res.body.data).toStrictEqual({
             id: serialized.id,
             agentId: serialized.agentId,
             accountId: serialized.accountId,
-            startTime: startTimeExpected,
-            endTime: endTimeExpected,
+            startTime: serialized.startTime,
+            endTime: serialized.endTime,
             createdAt: serialized.createdAt,
           });
         },
