@@ -9,6 +9,7 @@ import {
   Inject,
   ParseUUIDPipe,
   Query,
+  HttpCode,
 } from '@nestjs/common';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
@@ -73,6 +74,7 @@ export class SchedulesController {
     return SchedulesController.serialize(output);
   }
 
+  @HttpCode(204)
   @Delete(':id')
   async remove(
     @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
