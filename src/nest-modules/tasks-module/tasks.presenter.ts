@@ -18,9 +18,15 @@ export class TasksPresenter {
     this.accountId = output.accountId;
     this.scheduleId = output.scheduleId;
     this.type = output.type;
-    this.startTime = output.startTime ? output.startTime.toISOString() : null;
+    this.startTime = this.transformStartTime(output.startTime);
     this.duration = output.duration ? output.duration : null;
     this.createdAt = output.createdAt;
+  }
+
+  private transformStartTime(startTime: any) {
+    return startTime && startTime instanceof Date
+      ? startTime.toISOString()
+      : null;
   }
 }
 

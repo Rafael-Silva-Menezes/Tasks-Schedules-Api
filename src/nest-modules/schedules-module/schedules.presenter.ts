@@ -18,12 +18,18 @@ export class SchedulePresenter {
     this.id = output.id;
     this.accountId = output.accountId;
     this.agentId = output.agentId;
-    this.startTime = output.startTime ? output.startTime.toISOString() : null;
-    this.endTime = output.endTime ? output.endTime.toISOString() : null;
+    this.startTime = this.transformTime(output.startTime);
+    this.endTime = this.transformTime(output.endTime);
     this.createdAt = output.createdAt;
     this.tasks = output.tasks
       ? output.tasks.map((item) => new TasksPresenter(item))
       : [];
+  }
+
+  private transformTime(startTime: any) {
+    return startTime && startTime instanceof Date
+      ? startTime.toISOString()
+      : null;
   }
 }
 

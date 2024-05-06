@@ -21,7 +21,9 @@ import { CreateTasksDto } from './dto/create-task.dto';
 import { SearchTasksDto } from './dto/search-tasks.dto';
 import { UpdateTasksDto } from './dto/update-task.dto';
 import { TasksOutput } from '@core/tasks/application/common/tasks.use-case.mapper.types';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('tasks')
 @Controller('tasks')
 export class TasksController {
   @Inject(CreateTasksUseCase)

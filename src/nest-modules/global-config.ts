@@ -7,6 +7,7 @@ import { Reflector } from '@nestjs/core';
 import { WrapperDataInterceptor } from './shared-module/interceptors/wrapper-data/wrapper-data.interceptor';
 import { EntityValidationErrorFilter } from './shared-module/filters/entity-validation-error.filter';
 import { NotFoundErrorFilter } from './shared-module/filters/not-found-error.filter';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 export function applyGlobalConfig(app: INestApplication) {
   app.useGlobalPipes(
@@ -23,4 +24,12 @@ export function applyGlobalConfig(app: INestApplication) {
     new EntityValidationErrorFilter(),
     new NotFoundErrorFilter(),
   );
+
+  const config = new DocumentBuilder()
+    .setTitle('Schedules and Tasks Api')
+    .setDescription('Api to manager schedules with tasks')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 }

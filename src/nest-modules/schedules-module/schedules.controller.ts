@@ -24,7 +24,9 @@ import {
   SchedulePresenter,
 } from './schedules.presenter';
 import { SearchSchedulesDto } from './dto/search-schedules.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('schedules')
 @Controller('schedules')
 export class SchedulesController {
   @Inject(CreateScheduleUseCase)
