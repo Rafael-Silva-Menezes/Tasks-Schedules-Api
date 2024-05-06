@@ -7,6 +7,7 @@ const _keysInResponse = [
   'startTime',
   'endTime',
   'createdAt',
+  'tasks',
 ];
 
 export class GetScheduleFixture {

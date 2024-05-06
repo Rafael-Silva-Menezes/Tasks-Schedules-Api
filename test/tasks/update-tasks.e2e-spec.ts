@@ -1,5 +1,7 @@
 import { startApp } from 'src/nest-modules/shared-module/helpers/helpers';
 import * as TasksProviders from '../../src/nest-modules/tasks-module/tasks.providers';
+import * as SchedulesProviders from '../../src/nest-modules/schedules-module/schedules.providers';
+
 import { Tasks } from '@core/tasks/domain/entities/tasks.entity';
 import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
 import request from 'supertest';
@@ -8,6 +10,8 @@ import { ITasksRepository } from '@core/tasks/domain/interfaces/tasks.repository
 import { TasksController } from 'src/nest-modules/tasks-module/tasks.controller';
 import { instanceToPlain } from 'class-transformer';
 import { TasksMapper } from '@core/tasks/application/common/tasks.use-case.mapper';
+import { IScheduleRepository } from '@core/schedules/domain/interfaces/schedule.repository';
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
 
 describe('TasksController (e2e)', () => {
   const uuid = '9366b7dc-2d71-4799-b91c-c64adb205104';
@@ -70,15 +74,27 @@ describe('TasksController (e2e)', () => {
       const appHelper = startApp();
       const arrange = UpdateTasksFixture.arrangeForUpdate();
       let tasksRepo: ITasksRepository;
+      let scheduleRepo: IScheduleRepository;
 
       beforeEach(async () => {
         tasksRepo = appHelper.app.get<ITasksRepository>(
           TasksProviders.REPOSITORIES.TASKS_REPOSITORY.provide,
         );
+        scheduleRepo = appHelper.app.get<IScheduleRepository>(
+          SchedulesProviders.REPOSITORIES.SCHEDULE_REPOSITORY.provide,
+        );
       });
       test.each(arrange)('when body is $send_data', async ({ send_data }) => {
-        const tasksCreated = Tasks.fake().aTasks().build();
+        const scheduleCreated = Schedule.fake().aSchedule().build();
+        await scheduleRepo.insert(scheduleCreated);
+
+        const tasksCreated = Tasks.fake()
+          .aTasks()
+          .withScheduleId(scheduleCreated.getScheduleId())
+          .build();
         await tasksRepo.insert(tasksCreated);
+
+        send_data.scheduleId = scheduleCreated.getScheduleId().id;
 
         const res = await request(appHelper.app.getHttpServer())
           .patch(`/tasks/${tasksCreated.getTasksId().id}`)

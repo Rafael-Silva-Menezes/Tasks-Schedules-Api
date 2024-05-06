@@ -7,19 +7,33 @@ import { ITasksRepository } from '@core/tasks/domain/interfaces/tasks.repository
 import { ListTasksFixture } from 'src/nest-modules/tasks-module/helpers/tasks-fixture';
 import { TasksController } from 'src/nest-modules/tasks-module/tasks.controller';
 import { TasksMapper } from '@core/tasks/application/common/tasks.use-case.mapper';
+import { IScheduleRepository } from '@core/schedules/domain/interfaces/schedule.repository';
+import * as SchedulesProviders from 'src/nest-modules/schedules-module/schedules.providers';
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
 
-describe('TasksController (e2e)', () => {
+describe('SchedulesController (e2e)', () => {
   describe('/tasks (GET)', () => {
     describe('should return tasks sorted by created_at when request query is empty', () => {
       let taskseRepo: ITasksRepository;
+      let scheduleRepo: IScheduleRepository;
+
       const nestApp = startApp();
+      const scheduleCreated = Schedule.fake().aSchedule().build();
       const { entitiesMap, arrange } =
-        ListTasksFixture.arrangeIncrementedWithCreatedAt();
+        ListTasksFixture.arrangeIncrementedWithCreatedAt(
+          scheduleCreated.getScheduleId(),
+        );
 
       beforeEach(async () => {
         taskseRepo = nestApp.app.get<ITasksRepository>(
           TasksProviders.REPOSITORIES.TASKS_REPOSITORY.provide,
         );
+        scheduleRepo = nestApp.app.get<IScheduleRepository>(
+          SchedulesProviders.REPOSITORIES.SCHEDULE_REPOSITORY.provide,
+        );
+
+        await scheduleRepo.insert(scheduleCreated);
+
         await taskseRepo.bulkInsert(Object.values(entitiesMap));
       });
 

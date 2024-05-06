@@ -449,11 +449,11 @@ export class UpdateTasksFixture {
 }
 
 export class ListTasksFixture {
-  static arrangeIncrementedWithCreatedAt() {
+  static arrangeIncrementedWithCreatedAt(scheduleId?: Uuid) {
     const _entities = Tasks.fake()
       .theTasks(4)
       .withAccountId(new Uuid())
-      .withScheduleId(new Uuid())
+      .withScheduleId(scheduleId ?? new Uuid())
       .withType(TasksType.WORK)
       .withStartTime((i) => new Date(new Date().getTime() + i * 4000))
       .withDuration((i) => i * 5000)

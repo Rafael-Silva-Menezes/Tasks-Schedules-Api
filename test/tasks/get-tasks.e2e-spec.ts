@@ -7,6 +7,9 @@ import { Tasks } from '@core/tasks/domain/entities/tasks.entity';
 import { GetTasksFixture } from 'src/nest-modules/tasks-module/helpers/tasks-fixture';
 import { TasksController } from 'src/nest-modules/tasks-module/tasks.controller';
 import { TasksMapper } from '@core/tasks/application/common/tasks.use-case.mapper';
+import { IScheduleRepository } from '@core/schedules/domain/interfaces/schedule.repository';
+import * as SchedulesProviders from 'src/nest-modules/schedules-module/schedules.providers';
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
 
 describe('TasksController (e2e)', () => {
   const nestApp = startApp();
@@ -44,7 +47,17 @@ describe('TasksController (e2e)', () => {
       const tasksRepo = nestApp.app.get<ITasksRepository>(
         TasksProviders.REPOSITORIES.TASKS_REPOSITORY.provide,
       );
-      const tasks = Tasks.fake().aTasks().build();
+      const scheduleRepo = nestApp.app.get<IScheduleRepository>(
+        SchedulesProviders.REPOSITORIES.SCHEDULE_REPOSITORY.provide,
+      );
+
+      const scheduleCreated = Schedule.fake().aSchedule().build();
+      await scheduleRepo.insert(scheduleCreated);
+
+      const tasks = Tasks.fake()
+        .aTasks()
+        .withScheduleId(scheduleCreated.getScheduleId())
+        .build();
       await tasksRepo.insert(tasks);
 
       const res = await request(nestApp.app.getHttpServer())
