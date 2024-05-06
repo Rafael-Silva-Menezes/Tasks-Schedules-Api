@@ -82,6 +82,7 @@ class Schedule {
 - Implement caching for performance improvement
 - Implement validation for overlapping schedules
 - Implement GraphQL for more detailed queries
+- Implement one lambda function to notify the user about the schedule near
 
 ## About the API
 
