@@ -6,8 +6,8 @@ const _keysInResponse = [
   'accountId',
   'scheduleId',
   'type',
-  'duration',
   'startTime',
+  'duration',
   'createdAt',
 ];
 
@@ -291,7 +291,7 @@ export class CreateTasksFixture {
           type: 'invalid' as TasksType,
         },
         expected: {
-          message: ['type must be defined VALID'],
+          message: ['type must be one of the following values: break, work'],
           ...defaultExpected,
         },
       },
@@ -357,67 +357,18 @@ export class UpdateTasksFixture {
     };
 
     return {
-      EMPTY: {
-        send_data: {},
-        expected: {
-          message: [
-            'accountId should not be empty',
-            'accountId must be a UUID',
-            'scheduleId should not be empty',
-            'scheduleId must be a UUID',
-            'type should not be empty',
-            'type must be one of the following values: break, work',
-          ],
-          ...defaultExpected,
-        },
-      },
-      SCHEDULE_ID_UNDEFINED: {
-        send_data: {
-          scheduleId: undefined,
-          accountId: new Uuid().id,
-          type: TasksType.WORK,
-        },
-        expected: {
-          message: [
-            'accountId should not be empty',
-            'accountId must be a UUID',
-          ],
-          ...defaultExpected,
-        },
-      },
-      SCHEDULE_ID_NULL: {
-        send_data: {
-          scheduleId: null,
-          accountId: new Uuid().id,
-          type: TasksType.WORK,
-        },
-        expected: {
-          message: [
-            'scheduleId should not be empty',
-            'scheduleId must be a UUID',
-          ],
-          ...defaultExpected,
-        },
-      },
       SCHEDULE_ID_EMPTY: {
         send_data: {
           scheduleId: '',
-          accountId: new Uuid().id,
-          type: TasksType.WORK,
         },
         expected: {
-          message: [
-            'scheduleId should not be empty',
-            'scheduleId must be a UUID',
-          ],
+          message: ['scheduleId must be a UUID'],
           ...defaultExpected,
         },
       },
       SCHEDULE_ID_NOT_UUID: {
         send_data: {
           scheduleId: 5,
-          accountId: new Uuid().id,
-          type: TasksType.WORK,
         },
         expected: {
           message: ['scheduleId must be a UUID'],
@@ -428,9 +379,6 @@ export class UpdateTasksFixture {
       START_TIME_NOT_A_DATE: {
         send_data: {
           startTime: 'a',
-          scheduleId: new Uuid().id,
-          accountId: new Uuid().id,
-          type: TasksType.WORK,
         },
         expected: {
           message: ['startTime must be a Date instance'],
@@ -440,10 +388,6 @@ export class UpdateTasksFixture {
 
       DURATION_NOT_A_INTEGER: {
         send_data: {
-          startTime: new Date(),
-          scheduleId: new Uuid().id,
-          accountId: new Uuid().id,
-          type: TasksType.WORK,
           duration: '',
         },
         expected: {
@@ -456,32 +400,16 @@ export class UpdateTasksFixture {
 
       TYPE_EMPTY: {
         send_data: {
-          scheduleId: new Uuid().id,
-          accountId: new Uuid().id,
           type: '',
         },
         expected: {
-          message: ['type should not be empty'],
-          ...defaultExpected,
-        },
-      },
-
-      TYPE_NULL: {
-        send_data: {
-          scheduleId: new Uuid().id,
-          accountId: new Uuid().id,
-          type: null,
-        },
-        expected: {
-          message: ['type should not be empty'],
+          message: ['type must be one of the following values: break, work'],
           ...defaultExpected,
         },
       },
 
       TYPE_NOT_A_VALID: {
         send_data: {
-          scheduleId: new Uuid().id,
-          accountId: new Uuid().id,
           type: 'invalid',
         },
         expected: {
