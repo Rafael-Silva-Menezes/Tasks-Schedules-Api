@@ -75,10 +75,7 @@ export class TasksSequelizeRepository implements ITasksRepository {
     const { rows: models, count } = await this.tasksModel.findAndCountAll({
       ...(props.filter && {
         where: {
-          [Op.or]: [
-            { accountId: { [Op.like]: `%${props.filter}%` } },
-            { scheduleId: { [Op.like]: `%${props.filter}%` } },
-          ],
+          type: { [Op.like]: `%${props.filter}%` },
         },
       }),
       ...(props.sort && this.sortableFields.includes(props.sort)
