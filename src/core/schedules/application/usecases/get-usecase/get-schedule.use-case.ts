@@ -19,6 +19,6 @@ export class GetScheduleUseCase implements IGetScheduleUseCase {
       throw new NotFoundError(input.id, Schedule);
     }
 
-    return ScheduleMapper.toOutput(schedule);
+    return ScheduleMapper.toOutputWithTasks(schedule);
   }
 }

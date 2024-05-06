@@ -2,6 +2,7 @@ import { ScheduleOutput } from '@core/schedules/application/usecases/common/sche
 import { ListSchedulesOutput } from '@core/schedules/application/usecases/list-usecase/list-schedule.use-case.interface';
 import { Transform } from 'class-transformer';
 import { CollectionPresenter } from '../shared-module/collection.presenter';
+import { Tasks } from '@core/tasks/domain/entities/tasks.entity';
 
 export class SchedulePresenter {
   id: string;
@@ -11,6 +12,7 @@ export class SchedulePresenter {
   endTime: string | null;
   @Transform(({ value }: { value: Date }) => value.toISOString())
   createdAt: Date;
+  tasks?: Tasks[];
 
   constructor(output: ScheduleOutput) {
     this.id = output.id;
@@ -19,6 +21,7 @@ export class SchedulePresenter {
     this.startTime = output.startTime ? output.startTime.toISOString() : null;
     this.endTime = output.endTime ? output.endTime.toISOString() : null;
     this.createdAt = output.createdAt;
+    this.tasks = output.tasks;
   }
 }
 

@@ -1,6 +1,8 @@
+import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
 import {
   Column,
   DataType,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
@@ -35,4 +37,7 @@ export class ScheduleModel extends Model<ScheduleModelProps> {
 
   @Column({ allowNull: false, type: DataType.DATE(3), field: 'created_at' })
   declare createdAt: Date;
+
+  @HasMany(() => TasksModel, 'scheduleId')
+  declare tasks: TasksModel[];
 }

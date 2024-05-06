@@ -47,6 +47,7 @@ describe('GetScheduleUseCase Unit Tests', () => {
       startTime: items[0].getStartTime(),
       endTime: items[0].getEndTime(),
       createdAt: items[0].getCreatedAt(),
+      tasks: [],
     });
   });
 });

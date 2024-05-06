@@ -3,6 +3,7 @@ import { TasksController } from './tasks.controller';
 import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { TASKS_PROVIDERS } from './tasks.providers';
+import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
 
 @Module({
   imports: [SequelizeModule.forFeature([TasksModel])],

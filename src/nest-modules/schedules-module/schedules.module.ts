@@ -3,9 +3,10 @@ import { SchedulesController } from './schedules.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
 import { SCHEDULE_PROVIDERS } from './schedules.providers';
+import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
 
 @Module({
-  imports: [SequelizeModule.forFeature([ScheduleModel])],
+  imports: [SequelizeModule.forFeature([ScheduleModel, TasksModel])],
   controllers: [SchedulesController],
   providers: [
     ...Object.values(SCHEDULE_PROVIDERS.REPOSITORIES),

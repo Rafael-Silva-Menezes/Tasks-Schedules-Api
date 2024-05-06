@@ -5,12 +5,13 @@ import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
 import { setupSequelize } from '@core/shared/infra/helpers/helpers';
 import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
 import { UpdateScheduleUseCase } from '../update-schedule.use-case';
+import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
 
 describe('UpdateScheduleUseCase Integration Tests', () => {
   let useCase: UpdateScheduleUseCase;
   let repository: ScheduleSequelizeRepository;
 
-  setupSequelize({ models: [ScheduleModel] });
+  setupSequelize({ models: [ScheduleModel, TasksModel] });
 
   beforeEach(() => {
     repository = new ScheduleSequelizeRepository(ScheduleModel);

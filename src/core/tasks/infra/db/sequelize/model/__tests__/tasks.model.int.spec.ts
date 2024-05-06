@@ -34,7 +34,6 @@ describe('TasksModel Integration Tests', () => {
     expect(scheduleIdAttr).toMatchObject({
       field: 'schedule_id',
       fieldName: 'scheduleId',
-      primaryKey: true,
       type: DataType.UUID(),
     });
 

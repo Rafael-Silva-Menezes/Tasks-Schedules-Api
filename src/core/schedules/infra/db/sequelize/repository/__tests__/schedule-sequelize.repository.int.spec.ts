@@ -9,10 +9,11 @@ import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
 import { ScheduleModelMapper } from '../../model/schedule-mapper.model';
 import { ScheduleModel } from '../../model/schedule.model';
 import { ScheduleSequelizeRepository } from '../schedule-sequelize.repository';
+import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
 
 describe('ScheduleSequelizeRepository Integration Tests', () => {
   let repository: ScheduleSequelizeRepository;
-  setupSequelize({ models: [ScheduleModel] });
+  setupSequelize({ models: [ScheduleModel, TasksModel] });
 
   beforeEach(async () => {
     repository = new ScheduleSequelizeRepository(ScheduleModel);

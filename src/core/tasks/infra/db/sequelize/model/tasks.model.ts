@@ -1,7 +1,9 @@
+import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
 import { TasksType } from '@core/tasks/domain/interfaces/tasks.types';
 import {
   Column,
   DataType,
+  ForeignKey,
   Model,
   PrimaryKey,
   Table,
@@ -23,7 +25,7 @@ export class TasksModel extends Model<TasksModelProps> {
   @Column({ allowNull: false, type: DataType.UUID, field: 'tasks_id' })
   declare tasksId: string;
 
-  @PrimaryKey
+  @ForeignKey(() => ScheduleModel)
   @Column({ type: DataType.UUID, field: 'schedule_id' })
   declare scheduleId: string;
 

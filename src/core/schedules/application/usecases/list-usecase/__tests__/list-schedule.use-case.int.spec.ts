@@ -5,12 +5,13 @@ import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
 import { setupSequelize } from '@core/shared/infra/helpers/helpers';
 import { ListScheduleUseCase } from '../list-schedule.use-case';
 import { ScheduleMapper } from '../../common/schedule.use-case.mapper';
+import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
 
 describe('ListSchedulesUseCase Integration Tests', () => {
   let useCase: ListScheduleUseCase;
   let repository: ScheduleSequelizeRepository;
 
-  setupSequelize({ models: [ScheduleModel] });
+  setupSequelize({ models: [ScheduleModel, TasksModel] });
 
   beforeEach(() => {
     repository = new ScheduleSequelizeRepository(ScheduleModel);

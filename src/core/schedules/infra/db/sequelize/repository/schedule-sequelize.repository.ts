@@ -10,6 +10,8 @@ import { ScheduleModelMapper } from '../model/schedule-mapper.model';
 import { ScheduleModel } from '../model/schedule.model';
 import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
 import { SortDirection } from '@core/shared/domain/repository/search/search-params';
+import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
+import { TasksModelMapper } from '@core/tasks/infra/db/sequelize/model/tasks-mapper.model';
 
 export class ScheduleSequelizeRepository implements IScheduleRepository {
   sortableFields: string[] = ['createdAt'];
@@ -58,7 +60,9 @@ export class ScheduleSequelizeRepository implements IScheduleRepository {
   }
 
   async findById(entityId: Uuid): Promise<Schedule | null> {
-    const model = await this._get(entityId.id);
+    const model = await this.scheduleModel.findByPk(entityId.id, {
+      include: { model: TasksModel, as: 'tasks' },
+    });
     return model ? ScheduleModelMapper.toEntity(model) : null;
   }
   async findAll(): Promise<Schedule[]> {

@@ -7,6 +7,7 @@ import {
 } from '../interfaces/schedule.types';
 import { ScheduleValidatorFactory } from '../validators/schedule.validator';
 import { ScheduleFakeBuilder } from './schedule-faker.builder';
+import { Tasks } from '@core/tasks/domain/entities/tasks.entity';
 
 export class Schedule extends Entity {
   private scheduleId: Uuid;
@@ -15,6 +16,7 @@ export class Schedule extends Entity {
   private startTime: Date;
   private endTime: Date;
   private createdAt: Date;
+  private tasks: Tasks[];
 
   constructor(props: ScheduleConstructorProps) {
     super();
@@ -24,6 +26,7 @@ export class Schedule extends Entity {
     this.startTime = props.startTime ?? null;
     this.endTime = props.endTime ?? null;
     this.createdAt = props.createdAt ?? new Date();
+    this.tasks = props.tasks || [];
   }
 
   get entityId(): ValueObject {
@@ -73,8 +76,16 @@ export class Schedule extends Entity {
     return this.endTime || null;
   }
 
+  getTasks(): Tasks[] {
+    return this.tasks;
+  }
+
   getCreatedAt(): Date {
     return this.createdAt;
+  }
+
+  addTask(task: Tasks): void {
+    this.tasks.push(task);
   }
 
   static fake() {
@@ -89,6 +100,7 @@ export class Schedule extends Entity {
       startTime: this.getStartTime(),
       endTime: this.getEndTime(),
       createdAt: this.getCreatedAt(),
+      tasks: this.getTasks(),
     };
   }
 }

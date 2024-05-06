@@ -22,6 +22,8 @@ import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
 import { ScheduleMapper } from '@core/schedules/application/usecases/common/schedule.use-case.mapper';
 import { ConfigModule } from 'src/nest-modules/config-module/config.module';
 import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
+import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
+import { TasksModule } from 'src/nest-modules/tasks-module/tasks.module';
 
 describe('SchedulesController Integration Tests', () => {
   let controller: SchedulesController;
@@ -29,7 +31,12 @@ describe('SchedulesController Integration Tests', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot(), DatabaseModule, SchedulesModule],
+      imports: [
+        ConfigModule.forRoot(),
+        DatabaseModule,
+        TasksModule,
+        SchedulesModule,
+      ],
     }).compile();
     controller = module.get<SchedulesController>(SchedulesController);
     repository = module.get<IScheduleRepository>(
@@ -60,7 +67,7 @@ describe('SchedulesController Integration Tests', () => {
     );
   });
 
-  describe('should update a category', () => {
+  describe('should update a schedule', () => {
     const arrange = UpdateScheduleFixture.arrangeForUpdate();
 
     const schedule = Schedule.fake().aSchedule().build();
@@ -85,6 +92,7 @@ describe('SchedulesController Integration Tests', () => {
           agentId: expected.agentId ?? null,
           startTime: expected.startTime ? new Date(expected.startTime) : null,
           endTime: expected.endTime ? new Date(expected.endTime) : null,
+          tasks: [],
         });
         const output = ScheduleMapper.toOutput(entity);
         expect(presenter).toEqual(new SchedulePresenter(output));
@@ -124,7 +132,7 @@ describe('SchedulesController Integration Tests', () => {
   });
 
   describe('search method', () => {
-    describe('should sorted categories by created_at', () => {
+    describe('should sorted schedules by created_at', () => {
       const { entitiesMap, arrange } =
         ListSchedulesFixture.arrangeIncrementedWithCreatedAt();
 

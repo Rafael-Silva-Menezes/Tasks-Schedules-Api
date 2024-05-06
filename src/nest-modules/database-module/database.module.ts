@@ -3,8 +3,9 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigService } from '@nestjs/config';
 import { ScheduleModel } from '../../core/schedules/infra/db/sequelize/model/schedule.model';
 import { CONFIG_SCHEMA_TYPE } from '../config-module/config.validator';
+import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
 
-const models = [ScheduleModel];
+const models = [ScheduleModel, TasksModel];
 
 @Module({
   imports: [

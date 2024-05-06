@@ -115,7 +115,7 @@ describe('TasksController Integration Tests', () => {
   });
 
   describe('search method', () => {
-    describe('should sorted categories by created_at', () => {
+    describe('should sorted tasks by created_at', () => {
       const { entitiesMap, arrange } =
         ListTasksFixture.arrangeIncrementedWithCreatedAt();
 

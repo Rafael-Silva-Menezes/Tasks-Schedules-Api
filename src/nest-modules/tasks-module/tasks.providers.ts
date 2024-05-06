@@ -1,3 +1,4 @@
+import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
 import { CreateTasksUseCase } from '@core/tasks/application/create-usecase/create-tasks.use-case';
 import { DeleteTasksUseCase } from '@core/tasks/application/delete-usecase/delete-tasks.use-case';
 import { GetTasksUseCase } from '@core/tasks/application/get-usecase/get-tasks.use-case';

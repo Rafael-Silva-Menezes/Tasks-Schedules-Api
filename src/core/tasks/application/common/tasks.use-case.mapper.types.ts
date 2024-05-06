@@ -13,7 +13,7 @@ export type TasksOutput = {
   accountId: string;
   scheduleId: string;
   duration: number;
-  startTime?: Date;
+  startTime: Date;
   type: string;
   createdAt: Date;
 };

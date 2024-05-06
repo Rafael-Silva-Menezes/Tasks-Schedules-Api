@@ -4,6 +4,8 @@ import {
   ScheduleInput,
   ScheduleOutput,
 } from './schedule.use-case.mapper.types';
+import { Tasks } from '@core/tasks/domain/entities/tasks.entity';
+import { TasksMapper } from '@core/tasks/application/common/tasks.use-case.mapper';
 
 export class ScheduleMapper {
   static toEntity(input: ScheduleInput): Schedule {
@@ -17,11 +19,18 @@ export class ScheduleMapper {
   }
 
   static toOutput(entity: Schedule): ScheduleOutput {
-    const { scheduleId, accountId, agentId, ...otherProps } = entity.toJson();
+    const { scheduleId, tasks, ...otherProps } = entity.toJson();
     return {
       id: scheduleId,
-      accountId: accountId,
-      agentId: agentId,
+      ...otherProps,
+    };
+  }
+
+  static toOutputWithTasks(entity: Schedule): Required<ScheduleOutput> {
+    const { scheduleId, tasks, ...otherProps } = entity.toJson();
+    return {
+      id: scheduleId,
+      tasks: entity.getTasks().map((task) => TasksMapper.toOutput(task)),
       ...otherProps,
     };
   }

@@ -4,12 +4,13 @@ import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
 import { setupSequelize } from '@core/shared/infra/helpers/helpers';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateScheduleUseCase } from '../create-schedule.use-case';
+import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
 
 describe('CreateScheduleUseCase Integration Tests', () => {
   let useCase: CreateScheduleUseCase;
   let repository: ScheduleSequelizeRepository;
 
-  setupSequelize({ models: [ScheduleModel] });
+  setupSequelize({ models: [ScheduleModel, TasksModel] });
 
   beforeEach(() => {
     repository = new ScheduleSequelizeRepository(ScheduleModel);

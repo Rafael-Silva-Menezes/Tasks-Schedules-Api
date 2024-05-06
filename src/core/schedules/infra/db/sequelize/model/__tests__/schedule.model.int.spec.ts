@@ -2,9 +2,10 @@ import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
 import { setupSequelize } from '@core/shared/infra/helpers/helpers';
 import { DataType } from 'sequelize-typescript';
 import { ScheduleModel } from '../schedule.model';
+import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
 
 describe('ScheduleModel Integration Tests', () => {
-  setupSequelize({ models: [ScheduleModel] });
+  setupSequelize({ models: [ScheduleModel, TasksModel] });
 
   test('mapping props', () => {
     const attributesMap = ScheduleModel.getAttributes();
