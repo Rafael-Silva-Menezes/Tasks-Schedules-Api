@@ -83,8 +83,8 @@ describe('SchedulesController Integration Tests', () => {
           createdAt: presenter.createdAt,
           accountId: presenter.accountId,
           agentId: expected.agentId ?? null,
-          startTime: expected.startTime ?? null,
-          endTime: expected.endTime ?? null,
+          startTime: expected.startTime ? new Date(expected.startTime) : null,
+          endTime: expected.endTime ? new Date(expected.endTime) : null,
         });
         const output = ScheduleMapper.toOutput(entity);
         expect(presenter).toEqual(new SchedulePresenter(output));
