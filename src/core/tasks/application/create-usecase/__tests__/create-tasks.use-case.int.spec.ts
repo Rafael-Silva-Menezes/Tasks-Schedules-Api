@@ -5,21 +5,34 @@ import { TasksSequelizeRepository } from '@core/tasks/infra/db/sequelize/reposit
 import { setupSequelize } from '@core/shared/infra/helpers/helpers';
 import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
 import { TasksType } from '@core/tasks/domain/interfaces/tasks.types';
+import { ScheduleSequelizeRepository } from '@core/schedules/infra/db/sequelize/repository/schedule-sequelize.repository';
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
+import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
 
 describe('CreateTasksUseCase Integration Tests', () => {
   let useCase: CreateTasksUseCase;
-  let repository: TasksSequelizeRepository;
+  let tasksRepository: TasksSequelizeRepository;
+  let scheduleRepository: ScheduleSequelizeRepository;
 
-  setupSequelize({ models: [TasksModel] });
+  setupSequelize({ models: [TasksModel, ScheduleModel] });
 
   beforeEach(() => {
-    repository = new TasksSequelizeRepository(TasksModel);
-    useCase = new CreateTasksUseCase(repository);
+    tasksRepository = new TasksSequelizeRepository(TasksModel);
+    scheduleRepository = new ScheduleSequelizeRepository(ScheduleModel);
+
+    useCase = new CreateTasksUseCase(tasksRepository, scheduleRepository);
   });
 
   it('should create a tasks', async () => {
     const accountId = uuidv4();
     const scheduleId = uuidv4();
+
+    const schedule = Schedule.fake()
+      .aSchedule()
+      .withScheduleId(new Uuid(scheduleId))
+      .build();
+
+    await scheduleRepository.insert(schedule);
 
     let output = await useCase.execute({
       accountId,
@@ -29,7 +42,7 @@ describe('CreateTasksUseCase Integration Tests', () => {
       duration: 100,
     });
 
-    let entity = await repository.findById(new Uuid(output.id));
+    let entity = await tasksRepository.findById(new Uuid(output.id));
 
     expect(output).toStrictEqual({
       id: entity.getTasksId().id,
@@ -47,7 +60,7 @@ describe('CreateTasksUseCase Integration Tests', () => {
       type: TasksType.WORK,
     });
 
-    entity = await repository.findById(new Uuid(output.id));
+    entity = await tasksRepository.findById(new Uuid(output.id));
 
     expect(output).toStrictEqual({
       id: entity.getTasksId().id,

@@ -12,5 +12,6 @@ import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
     ...Object.values(SCHEDULE_PROVIDERS.REPOSITORIES),
     ...Object.values(SCHEDULE_PROVIDERS.USE_CASES),
   ],
+  exports: [SCHEDULE_PROVIDERS.REPOSITORIES.SCHEDULE_REPOSITORY.provide],
 })
 export class SchedulesModule {}

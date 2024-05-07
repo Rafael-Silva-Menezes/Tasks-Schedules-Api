@@ -22,18 +22,27 @@ import {
   TasksPresenter,
 } from 'src/nest-modules/tasks-module/tasks.presenter';
 import { Tasks } from '@core/tasks/domain/entities/tasks.entity';
+import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
+import { SchedulesModule } from 'src/nest-modules/schedules-module/schedules.module';
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
+import { IScheduleRepository } from '@core/schedules/domain/interfaces/schedule.repository';
+import { SCHEDULE_PROVIDERS } from 'src/nest-modules/schedules-module/schedules.providers';
 
 describe('TasksController Integration Tests', () => {
   let controller: TasksController;
-  let repository: ITasksRepository;
+  let tasksRepository: ITasksRepository;
+  let scheduleRepository: IScheduleRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule.forRoot(), DatabaseModule, TasksModule],
     }).compile();
     controller = module.get<TasksController>(TasksController);
-    repository = module.get<ITasksRepository>(
+    tasksRepository = module.get<ITasksRepository>(
       TASKS_PROVIDERS.REPOSITORIES.TASKS_REPOSITORY.provide,
+    );
+    scheduleRepository = module.get<IScheduleRepository>(
+      SCHEDULE_PROVIDERS.REPOSITORIES.SCHEDULE_REPOSITORY.provide,
     );
   });
 
@@ -47,23 +56,31 @@ describe('TasksController Integration Tests', () => {
   });
 
   describe('should create a tasks', () => {
-    const arrange = CreateTasksFixture.arrangeForCreate();
+    const schedule = Schedule.fake().aSchedule().build();
+    const scheduleId = schedule.getScheduleId();
+    const arrange = CreateTasksFixture.arrangeForCreate(scheduleId);
+
+    beforeEach(async () => {
+      await scheduleRepository.insert(schedule);
+    });
 
     test.each(arrange)('should send $title', async ({ send_data }) => {
       const presenter = await controller.create(send_data);
-      const entity = await repository.findById(new Uuid(presenter.id));
+      const entity = await tasksRepository.findById(new Uuid(presenter.id));
       const output = TasksMapper.toOutput(entity);
       expect(presenter).toEqual(new TasksPresenter(output));
     });
   });
 
   describe('should update a tasks', () => {
-    const arrange = UpdateTasksFixture.arrangeForUpdate();
-
-    const tasks = Tasks.fake().aTasks().build();
+    const schedule = Schedule.fake().aSchedule().build();
+    const scheduleId = schedule.getScheduleId();
+    const arrange = UpdateTasksFixture.arrangeForUpdate(scheduleId);
+    const tasks = Tasks.fake().aTasks().withScheduleId(scheduleId).build();
 
     beforeEach(async () => {
-      await repository.insert(tasks);
+      await scheduleRepository.insert(schedule);
+      await tasksRepository.insert(tasks);
     });
 
     test.each(arrange)('when body is $send_data', async ({ send_data }) => {
@@ -71,7 +88,7 @@ describe('TasksController Integration Tests', () => {
         tasks.getTasksId().id,
         send_data,
       );
-      const entity = await repository.findById(new Uuid(presenter.id));
+      const entity = await tasksRepository.findById(new Uuid(presenter.id));
 
       expect(entity.toJson()).toStrictEqual({
         tasksId: presenter.id,
@@ -89,19 +106,31 @@ describe('TasksController Integration Tests', () => {
 
   describe('should delete a tasks', () => {
     it('should send a id exist', async () => {
-      const tasks = Tasks.fake().aTasks().build();
-      await repository.insert(tasks);
+      const schedule = Schedule.fake().aSchedule().build();
+      const scheduleId = schedule.getScheduleId();
+      const tasks = Tasks.fake().aTasks().withScheduleId(scheduleId).build();
+
+      await scheduleRepository.insert(schedule);
+      await tasksRepository.insert(tasks);
+
       const response = await controller.remove(tasks.getTasksId().id);
+
       expect(response).not.toBeDefined();
-      await expect(repository.findById(tasks.getTasksId())).resolves.toBeNull();
+      await expect(
+        tasksRepository.findById(tasks.getTasksId()),
+      ).resolves.toBeNull();
     });
   });
 
   describe('should get a tasks', () => {
     it('should get a tasks', async () => {
-      const tasks = Tasks.fake().aTasks().build();
+      const schedule = Schedule.fake().aSchedule().build();
+      const scheduleId = schedule.getScheduleId();
+      const tasks = Tasks.fake().aTasks().withScheduleId(scheduleId).build();
 
-      await repository.insert(tasks);
+      await scheduleRepository.insert(schedule);
+      await tasksRepository.insert(tasks);
+
       const presenter = await controller.findOne(tasks.getTasksId().id);
 
       expect(presenter.id).toBe(tasks.getTasksId().id);
@@ -116,11 +145,15 @@ describe('TasksController Integration Tests', () => {
 
   describe('search method', () => {
     describe('should sorted tasks by created_at', () => {
+      const schedule = Schedule.fake().aSchedule().build();
+      const scheduleId = schedule.getScheduleId();
       const { entitiesMap, arrange } =
-        ListTasksFixture.arrangeIncrementedWithCreatedAt();
+        ListTasksFixture.arrangeIncrementedWithCreatedAt(scheduleId);
 
       beforeEach(async () => {
-        await repository.bulkInsert(Object.values(entitiesMap));
+        await scheduleRepository.insert(schedule);
+
+        await tasksRepository.bulkInsert(Object.values(entitiesMap));
       });
 
       test.each(arrange)(

@@ -19,11 +19,10 @@ describe('TasksController (e2e)', () => {
   describe('/tasks/:id (PATCH)', () => {
     describe('should a response error when id is invalid or not found', () => {
       const nestApp = startApp();
-      const faker = Tasks.fake().aTasks().withScheduleId(new Uuid()).build();
       const arrange = [
         {
           id: '88ff2587-ce5a-4769-a8c6-1d63d29c5f7a',
-          send_data: { scheduleId: faker.getScheduleId().id },
+          send_data: { duration: 1000 },
           expected: {
             message:
               'Tasks Not Found using ID 88ff2587-ce5a-4769-a8c6-1d63d29c5f7a',

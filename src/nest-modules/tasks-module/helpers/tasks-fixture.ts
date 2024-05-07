@@ -24,11 +24,11 @@ export class CreateTasksFixture {
 
   static keysInResponse = _keysInResponse;
 
-  static arrangeForCreate() {
+  static arrangeForCreate(scheduleId?: Uuid) {
     const faker = Tasks.fake()
       .aTasks()
       .withAccountId(this.accountId)
-      .withScheduleId(this.scheduleId)
+      .withScheduleId(scheduleId ?? this.scheduleId)
       .withStartTime(this.startTime)
       .withDuration(this.duration)
       .withType(this.type)
@@ -308,11 +308,11 @@ export class UpdateTasksFixture {
 
   static keysInResponse = _keysInResponse;
 
-  static arrangeForUpdate() {
+  static arrangeForUpdate(scheduleId?: Uuid) {
     const faker = Tasks.fake()
       .aTasks()
       .withAccountId(this.accountId)
-      .withScheduleId(this.scheduleId)
+      .withScheduleId(scheduleId ?? this.scheduleId)
       .withStartTime(this.startTime)
       .withDuration(this.duration)
       .withType(this.type)

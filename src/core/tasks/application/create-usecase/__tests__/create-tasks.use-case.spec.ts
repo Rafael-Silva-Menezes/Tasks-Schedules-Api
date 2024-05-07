@@ -2,14 +2,19 @@ import { TasksType } from '@core/tasks/domain/interfaces/tasks.types';
 import { CreateTasksUseCase } from '../create-tasks.use-case';
 import { TasksInMemoryRepository } from '@core/tasks/infra/db/in-memory/tasks-in-memory.repository';
 import { v4 as uuidv4 } from 'uuid';
+import { ScheduleInMemoryRepository } from '@core/schedules/infra/db/in-memory/schedule-in-memory.repository';
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
+import { Uuid } from '@core/shared/domain/value-objects/uuid-value-object';
 
 describe('CreateTasksUseCase Unit Tests', () => {
   let useCase: CreateTasksUseCase;
-  let repository: TasksInMemoryRepository;
+  let tasksRepository: TasksInMemoryRepository;
+  let scheduleRepository: ScheduleInMemoryRepository;
 
   beforeEach(() => {
-    repository = new TasksInMemoryRepository();
-    useCase = new CreateTasksUseCase(repository);
+    tasksRepository = new TasksInMemoryRepository();
+    scheduleRepository = new ScheduleInMemoryRepository();
+    useCase = new CreateTasksUseCase(tasksRepository, scheduleRepository);
   });
 
   it('should throw an error when aggregate is not valid', async () => {
@@ -18,15 +23,29 @@ describe('CreateTasksUseCase Unit Tests', () => {
       scheduleId: uuidv4(),
       type: 'any type' as TasksType,
     };
+
+    const schedule = Schedule.fake()
+      .aSchedule()
+      .withScheduleId(new Uuid(input.scheduleId))
+      .build();
+
+    await scheduleRepository.insert(schedule);
     await expect(() => useCase.execute(input)).rejects.toThrow(
       'Entity Validation Error',
     );
   });
 
   it('should create a tasks', async () => {
-    const spyInsert = jest.spyOn(repository, 'insert');
+    const spyInsert = jest.spyOn(tasksRepository, 'insert');
     const accountId = uuidv4();
     const scheduleId = uuidv4();
+
+    const schedule = Schedule.fake()
+      .aSchedule()
+      .withScheduleId(new Uuid(scheduleId))
+      .build();
+
+    await scheduleRepository.insert(schedule);
 
     const input1 = {
       accountId,

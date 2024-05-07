@@ -5,23 +5,36 @@ import { UpdateTasksUseCase } from '../update-tasks.use-case';
 import { TasksSequelizeRepository } from '@core/tasks/infra/db/sequelize/repository/tasks-sequelize.repository';
 import { TasksModel } from '@core/tasks/infra/db/sequelize/model/tasks.model';
 import { Tasks } from '@core/tasks/domain/entities/tasks.entity';
+import { ScheduleSequelizeRepository } from '@core/schedules/infra/db/sequelize/repository/schedule-sequelize.repository';
+import { ScheduleModel } from '@core/schedules/infra/db/sequelize/model/schedule.model';
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
 
 describe('UpdateTasksUseCase Integration Tests', () => {
   let useCase: UpdateTasksUseCase;
-  let repository: TasksSequelizeRepository;
+  let tasksRepository: TasksSequelizeRepository;
+  let scheduleRepository: ScheduleSequelizeRepository;
 
-  setupSequelize({ models: [TasksModel] });
+  setupSequelize({ models: [TasksModel, ScheduleModel] });
 
   beforeEach(() => {
-    repository = new TasksSequelizeRepository(TasksModel);
-    useCase = new UpdateTasksUseCase(repository);
+    tasksRepository = new TasksSequelizeRepository(TasksModel);
+    scheduleRepository = new ScheduleSequelizeRepository(ScheduleModel);
+    useCase = new UpdateTasksUseCase(tasksRepository, scheduleRepository);
   });
 
   it('should throws error when entity not found', async () => {
     const { id } = new Uuid();
-    await expect(() => useCase.execute({ id })).rejects.toThrow(
-      new NotFoundError(id, Tasks),
-    );
+    const scheduleId = new Uuid();
+
+    const schedule = Schedule.fake()
+      .aSchedule()
+      .withScheduleId(scheduleId)
+      .build();
+
+    await scheduleRepository.insert(schedule);
+    await expect(() =>
+      useCase.execute({ id, scheduleId: scheduleId.id }),
+    ).rejects.toThrow(new NotFoundError(id, Tasks));
   });
 
   it('should update a tasks', async () => {
@@ -29,12 +42,20 @@ describe('UpdateTasksUseCase Integration Tests', () => {
     const accountId = new Uuid();
     const startTime = new Date();
 
+    const schedule = Schedule.fake()
+      .aSchedule()
+      .withScheduleId(scheduleId)
+      .build();
+
+    await scheduleRepository.insert(schedule);
+
     const entity = Tasks.fake()
       .aTasks()
       .withAccountId(accountId)
+      .withScheduleId(scheduleId)
       .withDuration(1000)
       .build();
-    repository.insert(entity);
+    tasksRepository.insert(entity);
 
     const output = await useCase.execute({
       id: entity.getTasksId().id,

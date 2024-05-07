@@ -7,14 +7,16 @@ import { DeleteTasksUseCase } from '../delete-tasks.use-case';
 import { TasksInMemoryRepository } from '@core/tasks/infra/db/in-memory/tasks-in-memory.repository';
 import { Tasks } from '@core/tasks/domain/entities/tasks.entity';
 import { TasksType } from '@core/tasks/domain/interfaces/tasks.types';
+import { ScheduleInMemoryRepository } from '@core/schedules/infra/db/in-memory/schedule-in-memory.repository';
+import { Schedule } from '@core/schedules/domain/entities/schedule.entity';
 
 describe('DeleteTasksUseCase Unit Tests', () => {
   let useCase: DeleteTasksUseCase;
-  let repository: TasksInMemoryRepository;
+  let tasksRepository: TasksInMemoryRepository;
 
   beforeEach(() => {
-    repository = new TasksInMemoryRepository();
-    useCase = new DeleteTasksUseCase(repository);
+    tasksRepository = new TasksInMemoryRepository();
+    useCase = new DeleteTasksUseCase(tasksRepository);
   });
 
   it('should throws error when entity not found', async () => {
@@ -37,10 +39,11 @@ describe('DeleteTasksUseCase Unit Tests', () => {
         type: TasksType.WORK,
       }),
     ];
-    repository.items = items;
+
+    tasksRepository.items = items;
     await useCase.execute({
       id: items[0].getTasksId().id,
     });
-    expect(repository.items).toHaveLength(0);
+    expect(tasksRepository.items).toHaveLength(0);
   });
 });
