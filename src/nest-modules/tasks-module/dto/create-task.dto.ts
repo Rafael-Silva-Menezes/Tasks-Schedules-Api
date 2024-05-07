@@ -2,7 +2,7 @@ import { CreateTasksInput } from '@core/tasks/application/create-usecase/create-
 import { TasksType } from '@core/tasks/domain/interfaces/tasks.types';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateTasksDto implements CreateTasksInput {
+export class CreateTasksDto extends CreateTasksInput {
   @ApiProperty({
     description:
       'The UUID of the account associated with the task. This is the account of the task creator.',

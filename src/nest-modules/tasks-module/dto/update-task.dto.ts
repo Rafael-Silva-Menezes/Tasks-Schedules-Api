@@ -7,7 +7,7 @@ export class UpdateScheduleInputWithoutId extends OmitType(UpdateTasksInput, [
   'id',
 ] as const) {}
 
-export class UpdateTasksDto implements UpdateScheduleInputWithoutId {
+export class UpdateTasksDto extends UpdateScheduleInputWithoutId {
   @ApiProperty({
     description: 'The duration of the task in minutes.',
     example: 60,

@@ -1,7 +1,7 @@
 import { CreateScheduleInput } from '@core/schedules/application/usecases/create-usecase/create-schedule.input';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateScheduleDto implements CreateScheduleInput {
+export class CreateScheduleDto extends CreateScheduleInput {
   @ApiProperty({
     description: 'The UUID of the account associated with the schedule.',
     example: '550e8400-e29b-41d4-a716-446655440000',

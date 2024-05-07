@@ -7,7 +7,7 @@ export class UpdateScheduleInputWithoutId extends OmitType(
   ['id'] as const,
 ) {}
 
-export class UpdateScheduleDto implements UpdateScheduleInputWithoutId {
+export class UpdateScheduleDto extends UpdateScheduleInputWithoutId {
   @ApiProperty({
     description:
       'The UUID of the agent assigned to the schedule. This field is optional.',
